@@ -1,3 +1,7 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "pytest-iam"
 version = "0.1.0"
@@ -6,13 +10,66 @@ authors = ["Yaal Coop <contact@yaal.coop>"]
 license = "MIT"
 readme = "README.md"
 packages = [{include = "pytest_iam"}]
+keywords = ["oidc", "oauth", "oauth2", "openid", "identity", "pytest", "unit tests", "iam"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "License :: OSI Approved :: MIT License",
+    "Environment :: Web Environment",
+    "Programming Language :: Python",
+    "Operating System :: OS Independent",
+    "Framework :: Pytest",
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-canaille = "^0.0.31"
+canaille = {version = "^0.0.31", extras = ["oidc"] }
+portpicker = "^1.6.0"
 pytest = "^7.0.0"
+faker = "^19.3.0"
+
+[tool.poetry.plugins.pytest11]
+iam = "pytest_iam"
 
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry.group.dev.dependencies]
+requests = "^2.31.0"
+authlib = "^1.2.1"
+pytest-cov = "^4.1.0"
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = true
+skipsdist = true
+envlist =
+    style
+    py38
+    py39
+    py310
+    py311
+    doc
+    coverage
+
+[testenv]
+allowlist_externals = poetry
+commands =
+    poetry install
+    poetry run pytest {posargs}
+
+[testenv:style]
+commands =
+    pip install pre-commit
+    pre-commit run --all-files
+
+[testenv:coverage]
+commands =
+    poetry install
+    poetry run pytest --cov --cov-fail-under=100 --cov-report term:skip-covered {posargs}
+    poetry run coverage html
+"""
