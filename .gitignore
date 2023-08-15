@@ -1,0 +1,10 @@
+*.pyc
+*.prof
+.tox
+.coverage
+.coverage.*
+htmlcov
+*.egg-info
+build
+dist
+.vscode
