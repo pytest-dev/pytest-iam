@@ -28,7 +28,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-canaille = {version = "^0.0.31", extras = ["oidc"] }
+canaille = {version = "^0.0.32", extras = ["oidc"] }
 portpicker = "^1.6.0"
 pytest = "^7.0.0"
 faker = "^19.3.0"
@@ -54,7 +54,6 @@ envlist =
     py310
     py311
     doc
-    coverage
 
 [testenv]
 allowlist_externals = poetry
@@ -66,10 +65,4 @@ commands =
 commands =
     pip install pre-commit
     pre-commit run --all-files
-
-[testenv:coverage]
-commands =
-    poetry install
-    poetry run pytest --cov --cov-fail-under=100 --cov-report term:skip-covered {posargs}
-    poetry run coverage html
 """
