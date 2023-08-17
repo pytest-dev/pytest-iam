@@ -26,6 +26,8 @@ classifiers = [
     "Framework :: Pytest",
 ]
 
+repository = "https://gitlab.com/yaal/pytest-iam"
+
 [tool.poetry.dependencies]
 python = "^3.8"
 canaille = {version = "^0.0.32", extras = ["oidc"] }
