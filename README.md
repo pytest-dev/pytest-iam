@@ -24,10 +24,30 @@ To run a full authentication process in your test, you can write something like 
 
 ```python
 # We suppose you want to test a Flask application
-def test_authentication(iam_server, testapp, client, user):
+def test_authentication(iam_server, testapp):
     s = requests.Session()
 
-    # The /protected URL is protected and redirects to the identity provider
+    # Creates a user on the identity provider
+    iam_server.models.User(
+        user_name="user",
+        emails=["email@example.org"],
+        password="password",
+    )
+
+    # Creates a client on the identity provider
+    iam_server.models.Client(
+        client_id="client_id",
+        client_secret="client_secret",
+        client_name="my super app",
+        client_uri="http://example.org",
+        redirect_uris=["http://example.org/authorize"],
+        grant_types=["authorization_code"],
+        response_types=["code", "token", "id_token"],
+        token_endpoint_auth_method="client_secret_basic",
+        scope=["openid", "profile", "groups"],
+    )
+
+    # The /protected URL is protected and redirects to the IdP
     redirect_uri = testapp.get("/protected", status=302).location
 
     # The IdP presents a login screen
