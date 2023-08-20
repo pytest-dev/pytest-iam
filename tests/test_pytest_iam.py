@@ -63,7 +63,8 @@ def user(iam_server):
     inst.delete()
 
 
-def test_authlib_integration(iam_server, client, user):
+@pytest.fixture
+def app(iam_server, client):
     app = Flask(__name__)
     app.config["SECRET_KEY"] = str(uuid.uuid4())
     app.config["SERVER_NAME"] = "example.org"
@@ -89,12 +90,23 @@ def test_authlib_integration(iam_server, client, user):
         token = oauth.authorization_server.authorize_access_token()
         return jsonify(token)
 
-    testclient = app.test_client()
-    redirect_uri = testclient.get("/login").location
+    return app
 
+
+@pytest.fixture
+def testclient(app):
+    app.config["TESTING"] = True
+    return app.test_client()
+
+
+def test_manual_requests(iam_server, client, user, testclient):
     s = requests.Session()
 
-    # login screen
+    # attempt to access a protected page
+    redirect_uri = testclient.get("/login").location
+
+    # authorization code request
+    # 1. login screen
     res = s.post(
         redirect_uri,
         data={
@@ -104,12 +116,34 @@ def test_authlib_integration(iam_server, client, user):
         allow_redirects=False,
     )
 
-    # consent screen
+    # 2. consent screen
     res = s.post(
         redirect_uri,
         data={"answer": "accept"},
         allow_redirects=False,
     )
+
+    authorization = iam_server.models.AuthorizationCode.get()
+    assert authorization.client == client
+
+    res = testclient.get(res.headers["Location"])
+
+    token = iam_server.models.Token.get()
+    assert token.client == client
+
+    assert res.json["userinfo"]["sub"] == "user"
+    assert res.json["access_token"] == token.access_token
+
+
+def test_login_and_consent(iam_server, client, user, testclient):
+    iam_server.login(user)
+    iam_server.consent(user)
+
+    # attempt to access a protected page
+    res = testclient.get("/login")
+
+    # authorization code request (already logged in an consented)
+    res = requests.get(res.location, allow_redirects=False)
 
     authorization = iam_server.models.AuthorizationCode.get()
     assert authorization.client == client

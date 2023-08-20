@@ -1,3 +1,4 @@
+import datetime
 import threading
 import uuid
 import wsgiref.simple_server
@@ -9,6 +10,7 @@ from canaille.app import models
 from canaille.core.populate import fake_groups
 from canaille.core.populate import fake_users
 from canaille.oidc.installation import generate_keypair
+from flask import g
 
 
 class Server:
@@ -19,6 +21,12 @@ class Server:
         self.port = port
         self.httpd = wsgiref.simple_server.make_server("localhost", port, app)
         self.models = models
+        self.logged_user = None
+
+        @self.app.before_request
+        def logged_user():
+            if self.logged_user:
+                g.user = self.logged_user
 
     @property
     def url(self):
@@ -31,6 +39,28 @@ class Server:
     @property
     def random_group(self):
         return fake_groups(nb_users_max=0)[0]
+
+    def login(self, user):
+        self.logged_user = user
+
+    def consent(self, user, client=None):
+        clients = [client] if client else models.Client.query()
+
+        consents = [
+            self.models.Consent(
+                consent_id=str(uuid.uuid4()),
+                client=client,
+                subject=user,
+                scope=client.scope,
+                issue_date=datetime.datetime.now(datetime.timezone.utc),
+            )
+            for client in clients
+        ]
+
+        for consent in consents:
+            consent.save()
+
+        return consents if len(consents) == 1 else consents[0]
 
 
 @pytest.fixture(scope="session")

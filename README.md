@@ -23,19 +23,21 @@ pytest-iam provides a ``iam_server`` fixture that comes with several features:
 To run a full authentication process in your test, you can write something like this:
 
 ```python
-# We suppose you want to test a Flask application
-def test_authentication(iam_server, testapp):
-    s = requests.Session()
-
+@pytest.fixture
+def user(iam_server):
     # Creates a user on the identity provider
-    iam_server.models.User(
+    user = iam_server.models.User(
         user_name="user",
         emails=["email@example.org"],
         password="password",
     )
+    user.save()
+    return user
 
+@pytest.fixture
+def client(iam_server):
     # Creates a client on the identity provider
-    iam_server.models.Client(
+    client = iam_server.models.Client(
         client_id="client_id",
         client_secret="client_secret",
         client_name="my super app",
@@ -46,31 +48,20 @@ def test_authentication(iam_server, testapp):
         token_endpoint_auth_method="client_secret_basic",
         scope=["openid", "profile", "groups"],
     )
+    client.save()
+    return client
 
-    # The /protected URL is protected and redirects to the IdP
-    redirect_uri = testapp.get("/protected", status=302).location
+def test_authentication(iam_server, testapp, user, client):
+    iam_server.login(user)
+    iam_server.consent(user)
 
-    # The IdP presents a login screen
-    res = s.post(
-        redirect_uri,
-        data={
-            "login": "user",
-            "password": "password",
-        },
-        allow_redirects=False,
-    )
+    # attempt to access a protected page
+    response = testapp.get("/protected", status=302)
 
-    # The IdP presents a consent screen
-    res = s.post(
-        redirect_uri,
-        data={"answer": "accept"},
-        allow_redirects=False,
-    )
+    # authorization code request at the IAM
+    res = requests.get(res.location, allow_redirects=False)
 
-    # The IdP redirects to the client authorization endpoint
-    res = testapp.get(res.headers["Location"])
-
-    # Then the client endpoint finnaly redirects to the initial /protected page
-    res = res.follow()
+    # access to the redirection URI
+    res = testclient.get(res.headers["Location"])
     res.mustcontain("Hello World!")
 ```
