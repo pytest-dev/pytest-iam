@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "pytest-iam"
 version = "0.0.1"
-description = "A fully functional OAUTH2 / OpenID Connect server to be used in your testsuite"
+description = "A fully functional OAUTH2 / OpenID Connect (OIDC) server to be used in your testsuite"
 authors = ["Yaal Coop <contact@yaal.coop>"]
 license = "MIT"
 readme = "README.md"
