@@ -14,9 +14,12 @@ from flask import g
 
 
 class Server:
+    """
+    A proxy object that is returned by the pytest fixture.
+    """
     port: int
 
-    def __init__(self, app, port):
+    def __init__(self, app, port : int):
         self.app = app
         self.port = port
         self.httpd = wsgiref.simple_server.make_server("localhost", port, app)
@@ -29,18 +32,29 @@ class Server:
                 g.user = self.logged_user
 
     @property
-    def url(self):
+    def url(self) -> str:
+        """
+        The URL at which the IAM server is accessible.
+        """
         return f"http://localhost:{self.port}/"
 
-    @property
     def random_user(self):
+        """
+        Generates a test user with random values.
+        """
         return fake_users()[0]
 
-    @property
     def random_group(self):
+        """
+        Generates a test group with random values.
+        """
         return fake_groups(nb_users_max=0)[0]
 
     def login(self, user):
+        """
+        Opens a session for the user in the IAM session.
+        This allows to skip the connection screen.
+        """
         self.logged_user = user
 
     def consent(self, user, client=None):
