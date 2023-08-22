@@ -60,7 +60,11 @@ class Server:
         for consent in consents:
             consent.save()
 
-        return consents if len(consents) == 1 else consents[0]
+        if len(consents) > 1:
+            return consents
+        if len(consents) == 1:
+            return consents[0]
+        return None
 
 
 @pytest.fixture(scope="session")
