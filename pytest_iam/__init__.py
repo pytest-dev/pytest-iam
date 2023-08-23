@@ -2,6 +2,7 @@ import datetime
 import threading
 import uuid
 import wsgiref.simple_server
+from types import ModuleType
 
 import portpicker
 import pytest
@@ -10,6 +11,7 @@ from canaille.app import models
 from canaille.core.populate import fake_groups
 from canaille.core.populate import fake_users
 from canaille.oidc.installation import generate_keypair
+from flask import Flask
 from flask import g
 
 
@@ -17,9 +19,17 @@ class Server:
     """
     A proxy object that is returned by the pytest fixture.
     """
+
+    #: The port on which the local http server listens
     port: int
 
-    def __init__(self, app, port : int):
+    #: The authorization server flask app
+    app: Flask
+
+    #: The module containing the available model classes
+    models: ModuleType
+
+    def __init__(self, app, port: int):
         self.app = app
         self.port = port
         self.httpd = wsgiref.simple_server.make_server("localhost", port, app)
@@ -58,6 +68,11 @@ class Server:
         self.logged_user = user
 
     def consent(self, user, client=None):
+        """
+        Make a user consent to share data with OIDC clients.
+
+        :param client: If :const:`None`, all existing clients are consented.
+        """
         clients = [client] if client else models.Client.query()
 
         consents = [

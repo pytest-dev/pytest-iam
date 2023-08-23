@@ -1,8 +1,12 @@
 pytest-iam
 ==========
 
-pytest-iam spawns a lightweight OAuth2 / OpenID Server in a thread to be used in your test suite.
+pytest-iam spawns a lightweight OAuth2 / OpenID Server (OIDC)in a thread to be used in your test suite.
 The machinery involves [Canaille](https://canaille.yaal.coop) and [Authlib](https://authlib.org).
+
+- [Repository](https://gitlab.com/yaal-coop/pytest-iam)
+- [Package](https://pypi.org/project/pytest-iam)
+- [Documentation](https://pytest-iam.readthedocs.io)
 
 Installation
 ------------
@@ -14,54 +18,36 @@ pip install pytest-iam
 Usage
 -----
 
-pytest-iam provides a ``iam_server`` fixture that comes with several features:
+pytest-iam provides tools to test your application authentication mechanism agaist a OAuth2/OIDC server:
 
-- ``iam_server.url`` returns the temporary server url
-- ``iam_server.models`` provides a modules containing different models (``User``, ``Group``, ``Client``, ``Token`` and ``AuthorizationCode``). Read the [canaille documentation](https://canaille.readthedocs.io/en/latest/reference.html) to find how to handle those models.
-- ``iam_server.random_user()`` and ``iam_server.random_group()`` can generate random data for your tests
+- It launches a [Canaille](https://canaille.yaal.coop) instance
+- It provides a ``iam_fixture`` that comes with several features:
+    - Provides the URL of the IAM server to configure your application
+    - Provides you access to the IAM models (Users, groups, clients, tokens etc.) to prepare your tests and check the side effects.
+      More details on [the reference](https://pytest-iam.readthedocs.io/en/latest/reference.html)
+    - Provides utilities to log-in users and give their consent to your application
+    - Provides utilities to generate random users and groups
 
 To run a full authentication process in your test, you can write something like this:
 
 ```python
-@pytest.fixture
-def user(iam_server):
-    # Creates a user on the identity provider
-    user = iam_server.models.User(
-        user_name="user",
-        emails=["email@example.org"],
-        password="password",
-    )
-    user.save()
-    return user
+def test_authentication(iam_server, testapp, client):
+    # create a random user on the IAM server
+    user = iam_server.random_user()
 
-@pytest.fixture
-def client(iam_server):
-    # Creates a client on the identity provider
-    client = iam_server.models.Client(
-        client_id="client_id",
-        client_secret="client_secret",
-        client_name="my super app",
-        client_uri="http://example.org",
-        redirect_uris=["http://example.org/authorize"],
-        grant_types=["authorization_code"],
-        response_types=["code", "token", "id_token"],
-        token_endpoint_auth_method="client_secret_basic",
-        scope=["openid", "profile", "groups"],
-    )
-    client.save()
-    return client
-
-def test_authentication(iam_server, testapp, user, client):
+    # logs the user in give its consent to your application
     iam_server.login(user)
     iam_server.consent(user)
 
-    # attempt to access a protected page
+    # simulate an attempt to access a protected page of your app
     response = testapp.get("/protected", status=302)
 
-    # authorization code request at the IAM
+    # get an authorization code request at the IAM
     res = requests.get(res.location, allow_redirects=False)
 
     # access to the redirection URI
     res = testclient.get(res.headers["Location"])
     res.mustcontain("Hello World!")
 ```
+
+Check the [tutorial](https://pytest-iam.readthedocs.io/en/latest/tutorial.html) for more usecases.

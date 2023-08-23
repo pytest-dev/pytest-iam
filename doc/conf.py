@@ -40,6 +40,8 @@ todo_include_todos = False
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "canaille": ("https://canaille.readthedocs.io/en/latest/", None),
+    "flask": ("https://flask.palletsprojects.com/en/latest/", None),
+    "authlib": ("https://docs.authlib.org/en/latest/", None),
 }
 
 issues_uri = "https://gitlab.com/yaal/pytest_iam/-/issues/{issue}"
