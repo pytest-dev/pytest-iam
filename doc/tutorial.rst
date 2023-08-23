@@ -33,6 +33,8 @@ You might or might not be interested in testing how your application behaves whe
 depending on the situation and how much you trust the libraries that helps your application perform the authentication process.
 pytest-iam will help you set up some of those scenarios in your tests
 
+You can also test how your application deals with OIDC registration or refresh token exchange.
+
 Setting up your test
 --------------------
 
@@ -152,16 +154,16 @@ us see how to implement an authorization_code authentication test case:
         iam_server.consent(user)
 
         # 1. attempt to access a protected page
-        res = testclient.get("/protected")
+        res = testclient.get("/protected", status=302)
 
         # 2. authorization code request
         res = requests.get(res.location, allow_redirects=False)
 
         # 3. load your application authorization endpoint
-        res = testclient.get(res.headers["Location"])
+        res = testclient.get(res.headers["Location"], status=302)
 
         # 4. redirect to the protected page
-        res = res.follow()
+        res = res.follow(status=200)
 
 What happened?
 
