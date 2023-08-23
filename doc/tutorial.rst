@@ -53,16 +53,18 @@ IAM server for your tests. Optionnally you can put them in pytest fixtures so th
             password="password",
         )
         user.save()
-        return user
+        yield user
+        user.delete()
 
     @pytest.fixture
     def group(iam_server, user):
-        user = iam_server.models.Group(
+        group = iam_server.models.Group(
             display_name="group",
             members=[user],
         )
-        user.save()
-        return user
+        group.save()
+        yield group
+        group.delete()
 
 If you don't care about the data your users and group, you can use the available random generation utilities.
 
@@ -70,10 +72,62 @@ If you don't care about the data your users and group, you can use the available
 
     @pytest.fixture
     def user(iam_server):
-        return iam_server.random_user()
+        user = iam_server.random_user()
+        user.save()
+        yield user
+        user.delete()
 
     @pytest.fixture
     def group(iam_server, user):
         group = iam_server.random_group()
         group.members = group.members + [user]
-        return group
+        group.save()
+        yield group
+        group.delete()
+
+OIDC Client
+~~~~~~~~~~~
+
+Before your application can authenticate against the IAM server, it must register and give provide details
+such as the allowed redirection URIs. To achieve this you can use the :class:`~canaille.core.models.Client`
+model:
+
+.. code:: python
+
+    @pytest.fixture
+    def client(iam_server):
+        inst = iam_server.models.Client(
+            client_id="client_id",
+            client_secret="client_secret",
+            client_name="My Application",
+            client_uri="http://example.org",
+            redirect_uris=["http://example.org/authorize"],
+            grant_types=["authorization_code"],
+            response_types=["code", "token", "id_token"],
+            token_endpoint_auth_method="client_secret_basic",
+            scope=["openid", "profile", "groups"],
+        )
+        inst.save()
+        yield inst
+        inst.delete()
+
+Note that the IAM implements the `OAuth2/OIDC dynamic client registration protocol <https://datatracker.ietf.org/doc/html/rfc7591>`_,
+thus you might not need a client fixture if your application dynamically register one. No *initial token* is needed to use dynamic
+client registration. Here is an example of dynamic registration you can implement in your application:
+
+.. code:: python
+
+    response = requests.post(
+        f"{iam_server.url}/oauth/register",
+        json={
+            "client_name": "My application",
+            "client_uri": "http://example.org",
+            "redirect_uris": ["http://example.org/authorize"],
+            "grant_types": ["authorization_code"],
+            "response_types": ["code", "token", "id_token"],
+            "token_endpoint_auth_method": "client_secret_basic",
+            "scope": "openid profile groups",
+        },
+    )
+    client_id = response.json()["client_id"]
+    client_secret = response.json()["client_secret"]
