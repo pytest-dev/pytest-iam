@@ -89,8 +89,8 @@ OIDC Client
 ~~~~~~~~~~~
 
 Before your application can authenticate against the IAM server, it must register and give provide details
-such as the allowed redirection URIs. To achieve this you can use the :class:`~canaille.core.models.Client`
-model:
+such as the allowed redirection URIs. To achieve this you can use the :class:`~canaille.oidc.models.Client`
+model. Let us suppose your application have a ``/authorize`` endpoint for the authorization code - token exchange:
 
 .. code:: python
 
@@ -131,3 +131,48 @@ client registration. Here is an example of dynamic registration you can implemen
     )
     client_id = response.json()["client_id"]
     client_secret = response.json()["client_secret"]
+
+Nominal authentication case
+---------------------------
+
+Let us suppose that your application have a ``/protected`` that redirects users
+to the IAM server if unauthenticated. With your :class:`~canaille.core.models.User`
+and :class:`~canaille.oidc.models.Client` fixtures, you can use the
+:meth:`~pytest_iam.Server.login` and :meth:`~pytest_iam.Server.consent` methods
+to skip the login and the consent page from the IAM.
+
+We suppose you have a test client fixture like werkzeug :class:`~werkzeug.test.Client`
+that allows to test your application endpoints without real HTTP requests. Let
+us see how to implement an authorization_code authentication test case:
+
+.. code:: python
+
+    def test_login_and_consent(iam_server, client, user, testclient):
+        iam_server.login(user)
+        iam_server.consent(user)
+
+        # 1. attempt to access a protected page
+        res = testclient.get("/protected")
+
+        # 2. authorization code request
+        res = requests.get(res.location, allow_redirects=False)
+
+        # 3. load your application authorization endpoint
+        res = testclient.get(res.headers["Location"])
+
+        # 4. redirect to the protected page
+        res = res.follow()
+
+What happened?
+
+1. A simulation of an access to a protected page on your application.
+2. That redirects to the IAM authorization endpoint. Since the users are already
+   logged and their consent already given, the IAM redirects to your application
+   authorization configured redirect_uri, with the authorization code passed in
+   the query string. Note that ``requests`` is used in this example to perform
+   the request. Indeed, generally testclient such as the werkzeug one cannot
+   perform real HTTP requests.
+3. Access your application authorization endpoint that will exchange the
+   authorization code against a token and check the user credentials.
+4. For instance, your application can redirect the users back to the page
+   they attempted to access in the first place.
