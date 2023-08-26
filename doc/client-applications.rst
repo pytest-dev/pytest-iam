@@ -1,39 +1,14 @@
-Tutorial
-========
+Client applications
+===================
 
-What to test?
--------------
-
-You will probably want to test the nominal authentication case for your application, i.e. the case when the users successfully logs in and give their consent to your application.
-However, the `OAuth2 <https://datatracker.ietf.org/doc/html/rfc6749>`_ and the `OpenID Connect <https://openid.net/specs/openid-connect-core-1_0.html>`_ specifications details how things might go wrong:
-
-The `OAuth2 error codes <https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2.1>`_:
-
-- invalid_request
-- unauthorized_client
-- access_denied
-- unsupported_response_type
-- invalid_scope
-- server_error
-- temporarily_unavailable
-
-The `OIDC error codes <https://openid.net/specs/openid-connect-core-1_0.html#AuthError>`_:
-
-- interaction_required
-- login_required
-- account_selection_required
-- consent_required
-- invalid_request_uri
-- invalid_request_object
-- request_not_supported
-- request_uri_not_supported
-- registration_not_supported
-
-You might or might not be interested in testing how your application behaves when it encounters those situations,
-depending on the situation and how much you trust the libraries that helps your application perform the authentication process.
-pytest-iam will help you set up some of those scenarios in your tests
+If you are writing a client application, you will probably want to test the nominal authentication case,
+i.e. the case when the users successfully logs in and give their consent to your application.
+Depending on your implementation, you might also need to test how your application behaves in case
+of error during the authentication process.
 
 You can also test how your application deals with OIDC registration or refresh token exchange.
+
+pytest-iam will help you set up some of those scenarios in your tests.
 
 Setting up your test
 --------------------
@@ -87,8 +62,8 @@ If you don't care about the data your users and group, you can use the available
         yield group
         group.delete()
 
-OIDC Client
-~~~~~~~~~~~
+OIDC Client registration
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Before your application can authenticate against the IAM server, it must register and give provide details
 such as the allowed redirection URIs. To achieve this you can use the :class:`~canaille.oidc.models.Client`
@@ -178,3 +153,33 @@ What happened?
    authorization code against a token and check the user credentials.
 4. For instance, your application can redirect the users back to the page
    they attempted to access in the first place.
+
+Error cases
+-----------
+
+The `OAuth2 <https://datatracker.ietf.org/doc/html/rfc6749>`_ and the `OpenID Connect <https://openid.net/specs/openid-connect-core-1_0.html>`_ specifications details how things might go wrong:
+
+The `OAuth2 error codes <https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2.1>`_:
+
+- invalid_request
+- unauthorized_client
+- access_denied
+- unsupported_response_type
+- invalid_scope
+- server_error
+- temporarily_unavailable
+
+The `OIDC error codes <https://openid.net/specs/openid-connect-core-1_0.html#AuthError>`_:
+
+- interaction_required
+- login_required
+- account_selection_required
+- consent_required
+- invalid_request_uri
+- invalid_request_object
+- request_not_supported
+- request_uri_not_supported
+- registration_not_supported
+
+You might or might not be interested in testing how your application behaves when it encounters those situations,
+depending on the situation and how much you trust the libraries that helps your application perform the authentication process.

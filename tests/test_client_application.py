@@ -13,7 +13,7 @@ def test_server_configuration(iam_server):
     assert res.json()["issuer"] == iam_server.url
 
 
-def test_client_registration(iam_server):
+def test_client_dynamic_registration(iam_server):
     response = requests.post(
         f"{iam_server.url}/oauth/register",
         json={
@@ -31,36 +31,6 @@ def test_client_registration(iam_server):
 
     client = iam_server.models.Client.get(client_id=client_id)
     assert client.client_secret == client_secret
-
-
-@pytest.fixture
-def client(iam_server):
-    inst = iam_server.models.Client(
-        client_id="client_id",
-        client_secret="client_secret",
-        client_name="Nubla Dashboard",
-        client_uri="http://example.org",
-        redirect_uris=["http://example.org/authorize"],
-        grant_types=["authorization_code"],
-        response_types=["code", "token", "id_token"],
-        token_endpoint_auth_method="client_secret_basic",
-        scope=["openid", "profile", "groups"],
-    )
-    inst.save()
-    yield inst
-    inst.delete()
-
-
-@pytest.fixture
-def user(iam_server):
-    inst = iam_server.models.User(
-        user_name="user",
-        emails=["email@example.org"],
-        password="password",
-    )
-    inst.save()
-    yield inst
-    inst.delete()
 
 
 @pytest.fixture

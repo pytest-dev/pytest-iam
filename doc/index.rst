@@ -8,7 +8,8 @@ Table of contents
 .. toctree::
    :maxdepth: 2
 
-   tutorial
+   client-applications
+   resource-servers
    reference
    changelog
 

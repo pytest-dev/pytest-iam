@@ -21,14 +21,15 @@ Usage
 pytest-iam provides tools to test your application authentication mechanism agaist a OAuth2/OIDC server:
 
 - It launches a [Canaille](https://canaille.yaal.coop) instance
-- It provides a ``iam_fixture`` that comes with several features:
-    - Provides the URL of the IAM server to configure your application
-    - Provides you access to the IAM models (Users, groups, clients, tokens etc.) to prepare your tests and check the side effects.
+- It provides a ``iam_server`` fixture that comes with several features:
+    - the URL of the IAM server to configure your application
+    - IAM models (Users, groups, clients, tokens etc.) to prepare your tests and check the side effects.
       More details on [the reference](https://pytest-iam.readthedocs.io/en/latest/reference.html)
-    - Provides utilities to log-in users and give their consent to your application
-    - Provides utilities to generate random users and groups
+    - utilities to log-in users and give their consent to your application
+    - utilities to generate random users and groups
 
-To run a full authentication process in your test, you can write something like this:
+To run a full authentication process for a client application in your test,
+you can write something like this:
 
 ```python
 def test_authentication(iam_server, testapp, client):
@@ -50,4 +51,6 @@ def test_authentication(iam_server, testapp, client):
     res.mustcontain("Hello World!")
 ```
 
-Check the [tutorial](https://pytest-iam.readthedocs.io/en/latest/tutorial.html) for more usecases.
+Check the [client application](https://pytest-iam.readthedocs.io/en/latest/client-applications.html) or
+[resource server](https://pytest-iam.readthedocs.io/en/latest/resource-servers.html) tutorials
+for more usecases.

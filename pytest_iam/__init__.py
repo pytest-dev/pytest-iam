@@ -48,17 +48,47 @@ class Server:
         """
         return f"http://localhost:{self.port}/"
 
-    def random_user(self):
+    def random_user(self, **kwargs):
         """
-        Generates a test user with random values.
+        Generates a :class:`~canaille.core.models.User` with random values.
+        Any parameter will be used instead of a random value.
         """
-        return fake_users()[0]
+        user = fake_users()[0]
+        user.update(**kwargs)
+        user.save()
+        return user
 
-    def random_group(self):
+    def random_group(self, **kwargs):
         """
-        Generates a test group with random values.
+        Generates a :class:`~canaille.core.models.Group` with random values.
+        Any parameter will be used instead of a random value.
         """
-        return fake_groups(nb_users_max=0)[0]
+        group = fake_groups(nb_users_max=0)[0]
+        group.update(**kwargs)
+        group.save()
+        return group
+
+    def random_token(self, subject, client, **kwargs):
+        """
+        Generates a test :class:`~canaille.oidc.basemodels.Token` with random values.
+        Any parameter will be used instead of a random value.
+        """
+        token = self.models.Token(
+            id=str(uuid.uuid4()),
+            token_id=str(uuid.uuid4()),
+            access_token=str(uuid.uuid4()),
+            client=client,
+            subject=subject,
+            type="access_token",
+            refresh_token=str(uuid.uuid4()),
+            scope=client.scope,
+            issue_date=datetime.datetime.now(datetime.timezone.utc),
+            lifetime=3600,
+            audience=[client],
+        )
+        token.update(**kwargs)
+        token.save()
+        return token
 
     def login(self, user):
         """
