@@ -43,6 +43,7 @@ iam = "pytest_iam"
 requests = "^2.31.0"
 authlib = "^1.2.1"
 pytest-cov = "^4.1.0"
+joserfc = "^0.7.0"
 
 [tool.poetry.group.doc]
 optional = true

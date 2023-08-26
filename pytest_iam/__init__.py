@@ -16,6 +16,7 @@ from canaille.core.populate import fake_groups
 from canaille.core.populate import fake_users
 from canaille.oidc.basemodels import Token
 from canaille.oidc.installation import generate_keypair
+from canaille.oidc.oauth import generate_access_token
 from flask import Flask
 from flask import g
 
@@ -80,10 +81,13 @@ class Server:
         Any parameter will be used instead of a random value.
         """
         with self.app.app_context():
+            access_token = generate_access_token(
+                client, "authorization_code", subject, client.scope
+            )
             token = self.models.Token(
                 id=str(uuid.uuid4()),
                 token_id=str(uuid.uuid4()),
-                access_token=str(uuid.uuid4()),
+                access_token=access_token,
                 client=client,
                 subject=subject,
                 type="access_token",
@@ -136,7 +140,13 @@ class Server:
 
 
 @pytest.fixture(scope="session")
-def iam_configuration(tmp_path_factory) -> Dict[str, Any]:
+def iam_server_port() -> int:
+    """The port on which the identity server will listen to."""
+    return portpicker.pick_unused_port()
+
+
+@pytest.fixture(scope="session")
+def iam_configuration(tmp_path_factory, iam_server_port) -> Dict[str, Any]:
     """Fixture for editing the configuration of
     :meth:`~pytest_iam.iam_server`."""
 
@@ -149,6 +159,7 @@ def iam_configuration(tmp_path_factory) -> Dict[str, Any]:
         "OIDC": {
             "DYNAMIC_CLIENT_REGISTRATION_OPEN": True,
             "JWT": {
+                "ISS": f"http://localhost:{iam_server_port}/",
                 "PUBLIC_KEY": public_key,
                 "PRIVATE_KEY": private_key,
             },
@@ -166,13 +177,12 @@ def iam_configuration(tmp_path_factory) -> Dict[str, Any]:
 
 
 @pytest.fixture(scope="session")
-def iam_server(iam_configuration) -> Server:
+def iam_server(iam_configuration, iam_server_port) -> Server:
     """Fixture that creates a Canaille server listening a random port in a
     thread."""
 
-    port = portpicker.pick_unused_port()
     app = create_app(config=iam_configuration)
-    server = Server(app, port)
+    server = Server(app, iam_server_port)
 
     server_thread = threading.Thread(target=server.httpd.serve_forever)
     server_thread.start()
