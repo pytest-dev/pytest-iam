@@ -41,13 +41,13 @@ pytz = {version = ">=2015.7", markers = "python_version < \"3.9\""}
 
 [[package]]
 name = "canaille"
-version = "0.0.32"
+version = "0.0.33"
 description = "Minimalistic identity provider"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "canaille-0.0.32-cp311-cp311-manylinux_2_38_x86_64.whl", hash = "sha256:0a493a9888404175b3d380defd68837317bc7e84a9ccba5b11d755a5f130cc9e"},
-    {file = "canaille-0.0.32.tar.gz", hash = "sha256:4c0a2217ed4807beaec1dd2e36a2b821aea9071e9e5bdec77460736d212009a6"},
+    {file = "canaille-0.0.33-cp311-cp311-manylinux_2_38_x86_64.whl", hash = "sha256:ff92da35c36116f7585416ad58630922aaa3ab65cc5a0b5294c5bd66289d5ed7"},
+    {file = "canaille-0.0.33.tar.gz", hash = "sha256:dab646518249a2679526322a6d2d22b4b3e51011757c245db5cdd02be13e07d7"},
 ]
 
 [package.dependencies]
@@ -1173,4 +1173,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "2c757128ddc10b61d1b83771ba7ca6ae883c40842af040c3f07d6cd381854c16"
+content-hash = "0d2875841cbc63491f8520d1ede2ed223d092aa91e1e67891f604d0467fa67ce"
