@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+## [0.0.3] - 2023-08-31
+
 ### Added
 
 - Documentation draft
 - Implement `Server.random_token`
+- Loose canaille dependency
 
 ## [0.0.2] - 2023-08-21
 
