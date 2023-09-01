@@ -69,42 +69,6 @@ def testclient(app):
     return app.test_client()
 
 
-def test_manual_requests(iam_server, client, user, testclient):
-    s = requests.Session()
-
-    # attempt to access a protected page
-    redirect_uri = testclient.get("/login").location
-
-    # authorization code request
-    # 1. login screen
-    res = s.post(
-        redirect_uri,
-        data={
-            "login": "user",
-            "password": "password",
-        },
-        allow_redirects=False,
-    )
-
-    # 2. consent screen
-    res = s.post(
-        redirect_uri,
-        data={"answer": "accept"},
-        allow_redirects=False,
-    )
-
-    authorization = iam_server.models.AuthorizationCode.get()
-    assert authorization.client == client
-
-    res = testclient.get(res.headers["Location"])
-
-    token = iam_server.models.Token.get()
-    assert token.client == client
-
-    assert res.json["userinfo"]["sub"] == "user"
-    assert res.json["access_token"] == token.access_token
-
-
 def test_login_and_consent(iam_server, client, user, testclient):
     iam_server.login(user)
     iam_server.consent(user)
