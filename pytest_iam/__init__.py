@@ -53,9 +53,11 @@ class Server:
         Generates a :class:`~canaille.core.models.User` with random values.
         Any parameter will be used instead of a random value.
         """
-        user = fake_users()[0]
-        user.update(**kwargs)
-        user.save()
+        with self.app.app_context():
+            user = fake_users()[0]
+            user.update(**kwargs)
+            user.save()
+
         return user
 
     def random_group(self, **kwargs):
@@ -63,9 +65,11 @@ class Server:
         Generates a :class:`~canaille.core.models.Group` with random values.
         Any parameter will be used instead of a random value.
         """
-        group = fake_groups(nb_users_max=0)[0]
-        group.update(**kwargs)
-        group.save()
+        with self.app.app_context():
+            group = fake_groups(nb_users_max=0)[0]
+            group.update(**kwargs)
+            group.save()
+
         return group
 
     def random_token(self, subject, client, **kwargs):
@@ -73,21 +77,23 @@ class Server:
         Generates a test :class:`~canaille.oidc.basemodels.Token` with random values.
         Any parameter will be used instead of a random value.
         """
-        token = self.models.Token(
-            id=str(uuid.uuid4()),
-            token_id=str(uuid.uuid4()),
-            access_token=str(uuid.uuid4()),
-            client=client,
-            subject=subject,
-            type="access_token",
-            refresh_token=str(uuid.uuid4()),
-            scope=client.scope,
-            issue_date=datetime.datetime.now(datetime.timezone.utc),
-            lifetime=3600,
-            audience=[client],
-        )
-        token.update(**kwargs)
-        token.save()
+        with self.app.app_context():
+            token = self.models.Token(
+                id=str(uuid.uuid4()),
+                token_id=str(uuid.uuid4()),
+                access_token=str(uuid.uuid4()),
+                client=client,
+                subject=subject,
+                type="access_token",
+                refresh_token=str(uuid.uuid4()),
+                scope=client.scope,
+                issue_date=datetime.datetime.now(datetime.timezone.utc),
+                lifetime=3600,
+                audience=[client],
+            )
+            token.update(**kwargs)
+            token.save()
+
         return token
 
     def login(self, user):
@@ -103,21 +109,23 @@ class Server:
 
         :param client: If :const:`None`, all existing clients are consented.
         """
-        clients = [client] if client else models.Client.query()
 
-        consents = [
-            self.models.Consent(
-                consent_id=str(uuid.uuid4()),
-                client=client,
-                subject=user,
-                scope=client.scope,
-                issue_date=datetime.datetime.now(datetime.timezone.utc),
-            )
-            for client in clients
-        ]
+        with self.app.app_context():
+            clients = [client] if client else models.Client.query()
 
-        for consent in consents:
-            consent.save()
+            consents = [
+                self.models.Consent(
+                    consent_id=str(uuid.uuid4()),
+                    client=client,
+                    subject=user,
+                    scope=client.scope,
+                    issue_date=datetime.datetime.now(datetime.timezone.utc),
+                )
+                for client in clients
+            ]
+
+            for consent in consents:
+                consent.save()
 
         if len(consents) > 1:
             return consents

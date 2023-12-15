@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+## [0.0.4]
+
+### Fixed
+
+- Ensure model instances are created within the Canaille application context.
+
 ## [0.0.3] - 2023-08-31
 
 ### Added
