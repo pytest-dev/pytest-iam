@@ -1,6 +1,10 @@
 Reference
 #########
 
+.. autofunction:: pytest_iam.iam_server
+
+.. autofunction:: pytest_iam.iam_configuration
+
 .. autoclass:: pytest_iam.Server
     :members:
     :show-inheritance:

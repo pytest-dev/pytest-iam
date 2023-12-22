@@ -3,13 +3,20 @@ import threading
 import uuid
 import wsgiref.simple_server
 from types import ModuleType
+from typing import Any
+from typing import Dict
+from typing import List
 
 import portpicker
 import pytest
 from canaille import create_app
 from canaille.app import models
+from canaille.core.models import Group
+from canaille.core.models import User
 from canaille.core.populate import fake_groups
 from canaille.core.populate import fake_users
+from canaille.oidc.basemodels import Consent
+from canaille.oidc.basemodels import Token
 from canaille.oidc.installation import generate_keypair
 from flask import Flask
 from flask import g
@@ -48,7 +55,7 @@ class Server:
         """
         return f"http://localhost:{self.port}/"
 
-    def random_user(self, **kwargs):
+    def random_user(self, **kwargs) -> User:
         """
         Generates a :class:`~canaille.core.models.User` with random values.
         Any parameter will be used instead of a random value.
@@ -60,7 +67,7 @@ class Server:
 
         return user
 
-    def random_group(self, **kwargs):
+    def random_group(self, **kwargs) -> Group:
         """
         Generates a :class:`~canaille.core.models.Group` with random values.
         Any parameter will be used instead of a random value.
@@ -72,7 +79,7 @@ class Server:
 
         return group
 
-    def random_token(self, subject, client, **kwargs):
+    def random_token(self, subject, client, **kwargs) -> Token:
         """
         Generates a test :class:`~canaille.oidc.basemodels.Token` with random values.
         Any parameter will be used instead of a random value.
@@ -103,7 +110,7 @@ class Server:
         """
         self.logged_user = user
 
-    def consent(self, user, client=None):
+    def consent(self, user, client=None) -> Consent | List[Consent]:
         """
         Make a user consent to share data with OIDC clients.
 
@@ -135,10 +142,13 @@ class Server:
 
 
 @pytest.fixture(scope="session")
-def iam_server():
-    port = portpicker.pick_unused_port()
+def iam_configuration() -> Dict[str, Any]:
+    """
+    Fixture for editing the configuration of :meth:`~pytest_iam.iam_server`.
+    """
+
     private_key, public_key = generate_keypair()
-    config = {
+    return {
         "TESTING": True,
         "JAVASCRIPT": False,
         "WTF_CSRF_ENABLED": False,
@@ -156,7 +166,16 @@ def iam_server():
             }
         },
     }
-    app = create_app(config=config)
+
+
+@pytest.fixture(scope="session")
+def iam_server(iam_configuration) -> Server:
+    """
+    Fixture that creates a Canaille server listening a random port in a thread.
+    """
+
+    port = portpicker.pick_unused_port()
+    app = create_app(config=iam_configuration)
     server = Server(app, port)
 
     server_thread = threading.Thread(target=server.httpd.serve_forever)

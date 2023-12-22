@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+### Added
+
+- `iam_configuration` fixture
+
 ## [0.0.4] - 2023-12-15
 
 ### Fixed

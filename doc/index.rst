@@ -10,6 +10,7 @@ Table of contents
 
    client-applications
    resource-servers
+   configuration
    reference
    changelog
 
