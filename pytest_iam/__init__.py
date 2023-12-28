@@ -23,9 +23,7 @@ from flask import g
 
 
 class Server:
-    """
-    A proxy object that is returned by the pytest fixture.
-    """
+    """A proxy object that is returned by the pytest fixture."""
 
     #: The port on which the local http server listens
     port: int
@@ -50,14 +48,12 @@ class Server:
 
     @property
     def url(self) -> str:
-        """
-        The URL at which the IAM server is accessible.
-        """
+        """The URL at which the IAM server is accessible."""
         return f"http://localhost:{self.port}/"
 
     def random_user(self, **kwargs) -> User:
-        """
-        Generates a :class:`~canaille.core.models.User` with random values.
+        """Generates a :class:`~canaille.core.models.User` with random values.
+
         Any parameter will be used instead of a random value.
         """
         with self.app.app_context():
@@ -68,8 +64,8 @@ class Server:
         return user
 
     def random_group(self, **kwargs) -> Group:
-        """
-        Generates a :class:`~canaille.core.models.Group` with random values.
+        """Generates a :class:`~canaille.core.models.Group` with random values.
+
         Any parameter will be used instead of a random value.
         """
         with self.app.app_context():
@@ -80,8 +76,9 @@ class Server:
         return group
 
     def random_token(self, subject, client, **kwargs) -> Token:
-        """
-        Generates a test :class:`~canaille.oidc.basemodels.Token` with random values.
+        """Generates a test :class:`~canaille.oidc.basemodels.Token` with
+        random values.
+
         Any parameter will be used instead of a random value.
         """
         with self.app.app_context():
@@ -104,15 +101,14 @@ class Server:
         return token
 
     def login(self, user):
-        """
-        Opens a session for the user in the IAM session.
+        """Opens a session for the user in the IAM session.
+
         This allows to skip the connection screen.
         """
         self.logged_user = user
 
     def consent(self, user, client=None) -> Consent | List[Consent]:
-        """
-        Make a user consent to share data with OIDC clients.
+        """Make a user consent to share data with OIDC clients.
 
         :param client: If :const:`None`, all existing clients are consented.
         """
@@ -143,9 +139,8 @@ class Server:
 
 @pytest.fixture(scope="session")
 def iam_configuration() -> Dict[str, Any]:
-    """
-    Fixture for editing the configuration of :meth:`~pytest_iam.iam_server`.
-    """
+    """Fixture for editing the configuration of
+    :meth:`~pytest_iam.iam_server`."""
 
     private_key, public_key = generate_keypair()
     return {
@@ -170,9 +165,8 @@ def iam_configuration() -> Dict[str, Any]:
 
 @pytest.fixture(scope="session")
 def iam_server(iam_configuration) -> Server:
-    """
-    Fixture that creates a Canaille server listening a random port in a thread.
-    """
+    """Fixture that creates a Canaille server listening a random port in a
+    thread."""
 
     port = portpicker.pick_unused_port()
     app = create_app(config=iam_configuration)
