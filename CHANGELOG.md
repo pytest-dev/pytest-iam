@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+### Fixed
+
+- python <=3.8 uncompatible typing
+
 ## [0.0.5] - 2023-12-22
 
 ### Added

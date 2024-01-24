@@ -5,7 +5,6 @@ import wsgiref.simple_server
 from types import ModuleType
 from typing import Any
 from typing import Dict
-from typing import List
 
 import portpicker
 import pytest
@@ -15,7 +14,6 @@ from canaille.core.models import Group
 from canaille.core.models import User
 from canaille.core.populate import fake_groups
 from canaille.core.populate import fake_users
-from canaille.oidc.basemodels import Consent
 from canaille.oidc.basemodels import Token
 from canaille.oidc.installation import generate_keypair
 from flask import Flask
@@ -107,7 +105,7 @@ class Server:
         """
         self.logged_user = user
 
-    def consent(self, user, client=None) -> Consent | List[Consent]:
+    def consent(self, user, client=None):
         """Make a user consent to share data with OIDC clients.
 
         :param client: If :const:`None`, all existing clients are consented.
