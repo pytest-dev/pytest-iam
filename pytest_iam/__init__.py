@@ -136,7 +136,7 @@ class Server:
 
 
 @pytest.fixture(scope="session")
-def iam_configuration() -> Dict[str, Any]:
+def iam_configuration(tmp_path_factory) -> Dict[str, Any]:
     """Fixture for editing the configuration of
     :meth:`~pytest_iam.iam_server`."""
 
@@ -157,6 +157,10 @@ def iam_configuration() -> Dict[str, Any]:
             "DEFAULT": {
                 "PERMISSIONS": ["use_oidc", "manage_oidc"],
             }
+        },
+        "LOGGING": {
+            "LEVEL": "DEBUG",
+            "PATH": tmp_path_factory.mktemp("logs") / "canaille.log",
         },
     }
 

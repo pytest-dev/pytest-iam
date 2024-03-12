@@ -15,6 +15,7 @@ request against the identity server token introspection endpoint.
         )
         assert res.status_code == 200
 
+
     def test_invalid_token_auth(iam_server, testclient):
         res = testclient.get(
             "/protected-resource", headers={"Authorization": "Bearer invalid"}
