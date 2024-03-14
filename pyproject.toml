@@ -32,9 +32,9 @@ documentation = "https://pytest-iam.readthedocs.io/en/latest/"
 [tool.poetry.dependencies]
 python = "^3.8"
 canaille = {version = "<1", extras = ["oidc"] }
-portpicker = "^1.6.0"
-pytest = "^7.0.0"
-faker = "^21.0.0"
+portpicker = ">=1.6.0"
+pytest = ">=7.0.0"
+faker = ">=21.0.0"
 
 [tool.poetry.plugins.pytest11]
 iam = "pytest_iam"
