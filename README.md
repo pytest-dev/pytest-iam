@@ -18,7 +18,7 @@ pip install pytest-iam
 Usage
 -----
 
-pytest-iam provides tools to test your application authentication mechanism agaist a OAuth2/OIDC server:
+pytest-iam provides tools to test your application authentication mechanism against a OAuth2/OIDC server:
 
 - It launches a [Canaille](https://canaille.yaal.coop) instance
 - It provides a ``iam_server`` fixture that comes with several features:
