@@ -143,24 +143,37 @@ def iam_configuration(tmp_path_factory) -> Dict[str, Any]:
     private_key, public_key = generate_keypair()
     return {
         "TESTING": True,
-        "JAVASCRIPT": False,
-        "WTF_CSRF_ENABLED": False,
         "SECRET_KEY": str(uuid.uuid4()),
-        "OIDC": {
+        "WTF_CSRF_ENABLED": False,
+        "CANAILLE": {
+            "JAVASCRIPT": False,
+            "ACL": {
+                "DEFAULT": {
+                    "PERMISSIONS": ["use_oidc", "manage_oidc"],
+                }
+            },
+            "LOGGING": {
+                "version": 1,
+                "formatters": {
+                    "default": {
+                        "format": "[%(asctime)s] %(levelname)s in %(module)s: %(message)s",
+                    }
+                },
+                "handlers": {
+                    "canaille": {
+                        "class": "logging.NullHandler",
+                        "formatter": "default",
+                    }
+                },
+                "root": {"level": "DEBUG", "handlers": ["canaille"]},
+            },
+        },
+        "CANAILLE_OIDC": {
             "DYNAMIC_CLIENT_REGISTRATION_OPEN": True,
             "JWT": {
                 "PUBLIC_KEY": public_key,
                 "PRIVATE_KEY": private_key,
             },
-        },
-        "ACL": {
-            "DEFAULT": {
-                "PERMISSIONS": ["use_oidc", "manage_oidc"],
-            }
-        },
-        "LOGGING": {
-            "LEVEL": "DEBUG",
-            "PATH": tmp_path_factory.mktemp("logs") / "canaille.log",
         },
     }
 

@@ -31,6 +31,28 @@ def test_client_dynamic_registration(iam_server):
 
     client = iam_server.models.Client.get(client_id=client_id)
     assert client.client_secret == client_secret
+    client.delete()
+
+
+def test_logs(iam_server, caplog):
+    response = requests.post(
+        f"{iam_server.url}/oauth/register",
+        json={
+            "client_name": "Nubla Dashboard",
+            "client_uri": "http://example.org",
+            "redirect_uris": ["http://example.org/authorize"],
+            "grant_types": ["authorization_code"],
+            "response_types": ["code", "token", "id_token"],
+            "token_endpoint_auth_method": "client_secret_basic",
+            "scope": "openid profile groups",
+        },
+    )
+
+    assert caplog.records[0].msg == "client registration endpoint request: POST: %s"
+
+    client_id = response.json()["client_id"]
+    client = iam_server.models.Client.get(client_id=client_id)
+    client.delete()
 
 
 @pytest.fixture
