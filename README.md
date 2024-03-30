@@ -4,7 +4,7 @@ pytest-iam
 pytest-iam spawns a lightweight OAuth2 / OpenID Server (OIDC) in a thread to be used in your test suite.
 The machinery involves [Canaille](https://canaille.yaal.coop) and [Authlib](https://authlib.org).
 
-- [Repository](https://gitlab.com/yaal-coop/pytest-iam)
+- [Repository](https://gitlab.com/yaal/pytest-iam)
 - [Package](https://pypi.org/project/pytest-iam)
 - [Documentation](https://pytest-iam.readthedocs.io)
 
