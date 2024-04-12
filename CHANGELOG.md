@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+## [0.0.10] - 2024-04-12
+
 ### Changed
 
 - Move the repository to https://github.com/pytest-dev/pytest-iam
