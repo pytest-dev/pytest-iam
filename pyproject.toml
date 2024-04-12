@@ -26,7 +26,7 @@ classifiers = [
     "Framework :: Pytest",
 ]
 
-repository = "https://gitlab.com/yaal/pytest-iam"
+repository = "https://github.com/pytest-dev/pytest-iam"
 documentation = "https://pytest-iam.readthedocs.io/en/latest/"
 
 [tool.poetry.dependencies]

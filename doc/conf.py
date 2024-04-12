@@ -45,9 +45,9 @@ intersphinx_mapping = {
     "authlib": ("https://docs.authlib.org/en/latest/", None),
 }
 
-issues_uri = "https://gitlab.com/yaal/pytest_iam/-/issues/{issue}"
-issues_pr_uri = "https://gitlab.com/yaal/pytest_iam/-/merge_requests/{pr}"
-issues_commit_uri = "https://gitlab.com/yaal/pytest_iam/-/commit/{commit}"
+issues_uri = "https://github.com/pytest-dev/pytest_iam/-/issues/{issue}"
+issues_pr_uri = "https://github.com/pytest-dev/pytest_iam/-/merge_requests/{pr}"
+issues_commit_uri = "https://github.com/pytest-dev/pytest_iam/-/commit/{commit}"
 
 # -- Options for HTML output ----------------------------------------------
 
