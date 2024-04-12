@@ -1,0 +1,29 @@
+---
+name: tests
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    name: ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python:
+          - '3.12'
+          - '3.11'
+          - '3.10'
+          - '3.9'
+          - '3.8'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python }}
+          cache: 'poetry'
+      - run: poetry install
+      - run: poetry run pytest

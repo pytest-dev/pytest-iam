@@ -10,6 +10,7 @@ Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<pa
 ### Changed
 
 - Move the repository to https://github.com/pytest-dev/pytest-iam
+- GHA support #1
 
 ## [0.0.9] - 2024-03-30
 
