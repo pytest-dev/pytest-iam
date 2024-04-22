@@ -184,7 +184,9 @@ def iam_server(iam_configuration) -> Server:
     thread."""
 
     port = portpicker.pick_unused_port()
-    app = create_app(config=iam_configuration)
+    app = create_app(
+        config=iam_configuration, env_file=".pytest-iam.env", env_prefix="PYTEST_IAM_"
+    )
     server = Server(app, port)
 
     server_thread = threading.Thread(target=server.httpd.serve_forever)

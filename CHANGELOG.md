@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+## Changed
+
+- Configuration is read from `.pytest-iam.env`
+- Configuration is read from enviroment vars prefixed by `PYTEST_IAM_`
+
 ## [0.0.11] - 2024-04-22
 
 ### Changed
