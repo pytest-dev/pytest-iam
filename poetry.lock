@@ -63,13 +63,13 @@ files = [
 
 [[package]]
 name = "canaille"
-version = "0.0.52"
+version = "0.0.53"
 description = "Lightweight identity and authorization management software"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "canaille-0.0.52-cp311-cp311-manylinux_2_39_x86_64.whl", hash = "sha256:dc57a70f98d9241d6e976a4a9d0485f1f1c710ffbfa83e5adcb140cc70c3851c"},
-    {file = "canaille-0.0.52.tar.gz", hash = "sha256:d03fdc23c49819a2097549052f9ef45694de60f6384593893fc77ae56c3e4f42"},
+    {file = "canaille-0.0.53-cp311-cp311-manylinux_2_39_x86_64.whl", hash = "sha256:e3fa454827174fb347bc1aedf1286bbe9b6beedabf3cf82d8fdba7fb7420a8be"},
+    {file = "canaille-0.0.53.tar.gz", hash = "sha256:c9b1579d63e9777528dff0f9071c8fe755a5da171f1018b4c41742781a7d73cd"},
 ]
 
 [package.dependencies]
@@ -1351,4 +1351,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "2b280e6f63f28d94548b63cdc635006c999267411a95644b9d79cdf01374a73d"
+content-hash = "bcdab53618943dcff2f53caa2bd6455f924984e84a78b50a5098be04bf6db4c9"
