@@ -4,7 +4,6 @@ import uuid
 import wsgiref.simple_server
 from types import ModuleType
 from typing import Any
-from typing import Dict
 
 import portpicker
 import pytest
@@ -136,7 +135,7 @@ class Server:
 
 
 @pytest.fixture(scope="session")
-def iam_configuration(tmp_path_factory) -> Dict[str, Any]:
+def iam_configuration(tmp_path_factory) -> dict[str, Any]:
     """Fixture for editing the configuration of
     :meth:`~pytest_iam.iam_server`."""
 

@@ -30,7 +30,7 @@ repository = "https://github.com/pytest-dev/pytest-iam"
 documentation = "https://pytest-iam.readthedocs.io/en/latest/"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 canaille = {version = "<1", extras = ["oidc"] }
 portpicker = ">=1.6.0"
 pytest = ">=7.0.0"
@@ -63,7 +63,6 @@ isolated_build = true
 skipsdist = true
 envlist =
     style
-    py38
     py39
     py310
     py311
