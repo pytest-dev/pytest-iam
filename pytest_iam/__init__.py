@@ -142,6 +142,7 @@ def iam_configuration(tmp_path_factory) -> dict[str, Any]:
     private_key, public_key = generate_keypair()
     return {
         "TESTING": True,
+        "ENV_FILE": None,
         "SECRET_KEY": str(uuid.uuid4()),
         "WTF_CSRF_ENABLED": False,
         "CANAILLE": {
