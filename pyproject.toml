@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "pytest-iam"
-version = "0.0.12"
+version = "0.1.0"
 description = "A fully functional OAUTH2 / OpenID Connect (OIDC) server to be used in your testsuite"
 authors = ["Yaal Coop <contact@yaal.coop>"]
 license = "MIT"
@@ -13,11 +13,11 @@ packages = [{include = "pytest_iam"}]
 keywords = ["oidc", "oauth", "oauth2", "openid", "identity", "pytest", "unit tests", "iam"]
 classifiers = [
     "Intended Audience :: Developers",
-    "Development Status :: 3 - Alpha",
-    "Programming Language :: Python :: 3.8",
+    "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "License :: OSI Approved :: MIT License",
     "Environment :: Web Environment",

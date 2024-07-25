@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+## [0.1.0] - 2024-07-25
+
+### Changed
+
+- Update to Canaille 0.0.54. This break the way models are saved and deleted (`iam_server.backend.save(user)` instead of `user.save()`).
+  Please check the documentation to see examples.
+- Documentation uses Shibuya theme.
+
 ## [0.0.12] - 2024-04-22
 
 ### Changed
