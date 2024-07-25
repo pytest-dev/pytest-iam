@@ -14,9 +14,9 @@ def client(iam_server):
         token_endpoint_auth_method="client_secret_basic",
         scope=["openid", "profile", "groups"],
     )
-    inst.save()
+    iam_server.backend.save(inst)
     yield inst
-    inst.delete()
+    iam_server.backend.delete(inst)
 
 
 @pytest.fixture
@@ -27,6 +27,6 @@ def user(iam_server):
         emails=["email@example.org"],
         password="password",
     )
-    inst.save()
+    iam_server.backend.save(inst)
     yield inst
-    inst.delete()
+    iam_server.backend.delete(inst)

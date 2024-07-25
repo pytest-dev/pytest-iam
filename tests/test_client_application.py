@@ -29,7 +29,7 @@ def test_client_dynamic_registration(iam_server):
     client_id = response.json()["client_id"]
     client_secret = response.json()["client_secret"]
 
-    client = iam_server.models.Client.get(client_id=client_id)
+    client = iam_server.backend.get(iam_server.models.Client, client_id=client_id)
     assert client.client_secret == client_secret
     client.delete()
 
@@ -51,7 +51,7 @@ def test_logs(iam_server, caplog):
     assert caplog.records[0].msg == "client registration endpoint request: POST: %s"
 
     client_id = response.json()["client_id"]
-    client = iam_server.models.Client.get(client_id=client_id)
+    client = iam_server.backend.get(iam_server.models.Client, client_id=client_id)
     client.delete()
 
 
@@ -101,12 +101,12 @@ def test_login_and_consent(iam_server, client, user, testclient):
     # authorization code request (already logged in an consented)
     res = requests.get(res.location, allow_redirects=False)
 
-    authorization = iam_server.models.AuthorizationCode.get()
+    authorization = iam_server.backend.get(iam_server.models.AuthorizationCode)
     assert authorization.client == client
 
     res = testclient.get(res.headers["Location"])
 
-    token = iam_server.models.Token.get()
+    token = iam_server.backend.get(iam_server.models.Token)
     assert token.client == client
 
     assert res.json["userinfo"]["sub"] == "user"

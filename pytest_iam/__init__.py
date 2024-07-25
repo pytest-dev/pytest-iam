@@ -9,6 +9,7 @@ import portpicker
 import pytest
 from canaille import create_app
 from canaille.app import models
+from canaille.backends import Backend
 from canaille.core.models import Group
 from canaille.core.models import User
 from canaille.core.populate import fake_groups
@@ -22,17 +23,21 @@ from flask import g
 class Server:
     """A proxy object that is returned by the pytest fixture."""
 
-    #: The port on which the local http server listens
     port: int
+    """The port on which the local http server listens."""
 
-    #: The authorization server flask app
     app: Flask
+    """The authorization server flask app."""
 
-    #: The module containing the available model classes
     models: ModuleType
+    """The module containing the available model classes."""
 
-    def __init__(self, app, port: int):
+    backend: Backend
+    """The backend used to manage models."""
+
+    def __init__(self, app, port: int, backend: Backend):
         self.app = app
+        self.backend = backend
         self.port = port
         self.httpd = wsgiref.simple_server.make_server("localhost", port, app)
         self.models = models
@@ -92,8 +97,8 @@ class Server:
                 lifetime=3600,
                 audience=[client],
             )
-            token.update(**kwargs)
-            token.save()
+            self.backend.update(token, **kwargs)
+            self.backend.save(token)
 
         return token
 
@@ -111,7 +116,7 @@ class Server:
         """
 
         with self.app.app_context():
-            clients = [client] if client else models.Client.query()
+            clients = [client] if client else self.backend.query(models.Client)
 
             consents = [
                 self.models.Consent(
@@ -125,7 +130,7 @@ class Server:
             ]
 
             for consent in consents:
-                consent.save()
+                self.backend.save(consent)
 
         if len(consents) > 1:
             return consents
@@ -187,7 +192,7 @@ def iam_server(iam_configuration) -> Server:
     app = create_app(
         config=iam_configuration, env_file=".pytest-iam.env", env_prefix="PYTEST_IAM_"
     )
-    server = Server(app, port)
+    server = Server(app, port, Backend.instance)
 
     server_thread = threading.Thread(target=server.httpd.serve_forever)
     server_thread.start()

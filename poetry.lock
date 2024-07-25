@@ -63,13 +63,13 @@ files = [
 
 [[package]]
 name = "canaille"
-version = "0.0.53"
+version = "0.0.54"
 description = "Lightweight identity and authorization management software"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "canaille-0.0.53-cp311-cp311-manylinux_2_39_x86_64.whl", hash = "sha256:e3fa454827174fb347bc1aedf1286bbe9b6beedabf3cf82d8fdba7fb7420a8be"},
-    {file = "canaille-0.0.53.tar.gz", hash = "sha256:c9b1579d63e9777528dff0f9071c8fe755a5da171f1018b4c41742781a7d73cd"},
+    {file = "canaille-0.0.54-cp312-cp312-manylinux_2_40_x86_64.whl", hash = "sha256:f019f33eac391890e9711702b6527c592d4363ca8577fdfcce72266386c608fb"},
+    {file = "canaille-0.0.54.tar.gz", hash = "sha256:c4b852627588f0c8749142ef12c74294e8e1f5719beef9eb313e72389f9729fa"},
 ]
 
 [package.dependencies]
@@ -80,11 +80,11 @@ pydantic-settings = ">=2.0.3,<3.0.0"
 wtforms = ">=3.1.1,<4.0.0"
 
 [package.extras]
-all = ["authlib (>=1.2.1,<2.0.0)", "email_validator (>=2.0.0,<3.0.0)", "flask-babel (>=4.0.0,<5.0.0)", "flask-themer (>=2.0.0,<3.0.0)", "passlib (>=1.7.4,<2.0.0)", "pycountry (>=22.1.10)", "python-ldap (>=3.4.0,<4.0.0)", "pytz (>=2022.7)", "sentry-sdk[flask] (<2)", "sqlalchemy (>=2.0.23,<3.0.0)", "sqlalchemy-json (>=0.7.0,<0.8.0)", "sqlalchemy-utils (>=0.41.1,<0.42.0)", "toml (>=0.10.0,<0.11.0)"]
+all = ["authlib (>=1.2.1,<2.0.0)", "email_validator (>=2.0.0,<3.0.0)", "flask-babel (>=4.0.0,<5.0.0)", "flask-themer (>=2.0.0,<3.0.0)", "passlib (>=1.7.4,<2.0.0)", "pycountry (>=22.1.10)", "python-ldap (>=3.4.0,<4.0.0)", "pytz (>=2022.7)", "sentry-sdk[flask] (>=2.0.0,<3.0.0)", "sqlalchemy (>=2.0.23,<3.0.0)", "sqlalchemy-json (>=0.7.0,<0.8.0)", "sqlalchemy-utils (>=0.41.1,<0.42.0)", "toml (>=0.10.0,<0.11.0)"]
 front = ["email_validator (>=2.0.0,<3.0.0)", "flask-babel (>=4.0.0,<5.0.0)", "flask-themer (>=2.0.0,<3.0.0)", "pycountry (>=22.1.10)", "pytz (>=2022.7)", "toml (>=0.10.0,<0.11.0)"]
 ldap = ["python-ldap (>=3.4.0,<4.0.0)"]
 oidc = ["authlib (>=1.2.1,<2.0.0)"]
-sentry = ["sentry-sdk[flask] (<2)"]
+sentry = ["sentry-sdk[flask] (>=2.0.0,<3.0.0)"]
 sql = ["passlib (>=1.7.4,<2.0.0)", "sqlalchemy (>=2.0.23,<3.0.0)", "sqlalchemy-json (>=0.7.0,<0.8.0)", "sqlalchemy-utils (>=0.41.1,<0.42.0)"]
 
 [[package]]
@@ -1358,4 +1358,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "8239dc80e700f020c5983b48c614c027392985d00cef50e8051d0fe2bb28b330"
+content-hash = "2691e5b8b5d9e2ea59fe2467742b10a71db445ae50cda9434c2f4fd722a98c7e"
