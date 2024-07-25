@@ -40,18 +40,18 @@ faker = ">=21.0.0"
 iam = "pytest_iam"
 
 [tool.poetry.group.dev.dependencies]
-requests = "^2.31.0"
 authlib = "^1.2.1"
 pytest-cov = "^5.0.0"
+requests = "^2.31.0"
 
 [tool.poetry.group.doc]
 optional = true
 
 [tool.poetry.group.doc.dependencies]
-myst-parser = "^2.0.0"
-sphinx = "^7.0.0"
-sphinx-issues = "^3.0.0"
 alabaster = "^0.7.13"
+myst-parser = "^3.0.0"
+sphinx = "^7.0.0"
+sphinx-issues = "^4.0.0"
 
 [tool.ruff]
 ignore = ["E501", "E722"]
