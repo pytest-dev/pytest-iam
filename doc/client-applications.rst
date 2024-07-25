@@ -29,9 +29,9 @@ IAM server for your tests. Optionnally you can put them in pytest fixtures so th
             emails=["email@example.org"],
             password="password",
         )
-        user.save()
+        iam_server.backend.save(user)
         yield user
-        user.delete()
+        iam_server.backend.delete(user)
 
     @pytest.fixture
     def group(iam_server, user):
@@ -39,9 +39,9 @@ IAM server for your tests. Optionnally you can put them in pytest fixtures so th
             display_name="group",
             members=[user],
         )
-        group.save()
+        iam_server.backend.save(group)
         yield group
-        group.delete()
+        iam_server.backend.delete(group)
 
 If you don't care about the data your users and group, you can use the available random generation utilities.
 
@@ -50,17 +50,17 @@ If you don't care about the data your users and group, you can use the available
     @pytest.fixture
     def user(iam_server):
         user = iam_server.random_user()
-        user.save()
+        iam_server.backend.save(user)
         yield user
-        user.delete()
+        iam_server.backend.delete(user)
 
     @pytest.fixture
     def group(iam_server, user):
         group = iam_server.random_group()
         group.members = group.members + [user]
-        group.save()
+        iam_server.backend.save(group)
         yield group
-        group.delete()
+        iam_server.backend.delete(group)
 
 OIDC Client registration
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,9 +84,9 @@ model. Let us suppose your application have a ``/authorize`` endpoint for the au
             token_endpoint_auth_method="client_secret_basic",
             scope=["openid", "profile", "groups"],
         )
-        inst.save()
+        iam_server.backend.save(inst)
         yield inst
-        inst.delete()
+        iam_server.backend.delete(inst)
 
 Note that the IAM implements the `OAuth2/OIDC dynamic client registration protocol <https://datatracker.ietf.org/doc/html/rfc7591>`_,
 thus you might not need a client fixture if your application dynamically register one. No *initial token* is needed to use dynamic
