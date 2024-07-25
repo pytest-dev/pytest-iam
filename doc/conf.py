@@ -51,8 +51,18 @@ issues_commit_uri = "https://github.com/pytest-dev/pytest_iam/-/commit/{commit}"
 
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = "alabaster"
-html_static_path = []
+html_theme = "shibuya"
+html_baseurl = "https://pytest-iam.readthedocs.io"
+html_theme_options = {
+    "github_url": "https://github.com/pytest-dev/pytest-iam",
+}
+html_context = {
+    "source_type": "github",
+    "source_user": "pytest-dev",
+    "source_repo": "pytest-iam",
+    "source_version": "main",
+    "source_docs_path": "/doc/",
+}
 
 
 # -- Options for HTMLHelp output ------------------------------------------

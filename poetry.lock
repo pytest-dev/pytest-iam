@@ -1098,6 +1098,20 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
+name = "shibuya"
+version = "2024.7.13"
+description = "A clean, responsive, and customizable Sphinx documentation theme with light/dark mode."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "shibuya-2024.7.13-py3-none-any.whl", hash = "sha256:810dde8580d46ce31f3de356fca715d5a2389ecfbfcba653f03086028bb1e5f4"},
+    {file = "shibuya-2024.7.13.tar.gz", hash = "sha256:8fbe547d371e907a55d185b9471dc57c4823cfb344ed7ff7eed1a13c881abd11"},
+]
+
+[package.dependencies]
+Sphinx = "*"
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -1358,4 +1372,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "2691e5b8b5d9e2ea59fe2467742b10a71db445ae50cda9434c2f4fd722a98c7e"
+content-hash = "704eeb8cc9479bd9daf9bee194ca29120a446bfec1b8d455f57cf4b351aa39b1"

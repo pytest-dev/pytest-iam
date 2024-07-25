@@ -48,8 +48,8 @@ requests = "^2.31.0"
 optional = true
 
 [tool.poetry.group.doc.dependencies]
-alabaster = "^0.7.13"
 myst-parser = "^3.0.0"
+shibuya = "^2024.7.13"
 sphinx = "^7.0.0"
 sphinx-issues = "^4.0.0"
 
