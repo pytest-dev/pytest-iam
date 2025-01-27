@@ -41,7 +41,7 @@ iam = "pytest_iam"
 
 [tool.poetry.group.dev.dependencies]
 authlib = "^1.2.1"
-pytest-cov = "^5.0.0"
+pytest-cov = "^6.0.0"
 requests = "^2.31.0"
 
 [tool.poetry.group.doc]
