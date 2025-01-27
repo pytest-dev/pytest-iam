@@ -1,0 +1,51 @@
+---
+name: bundle
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: build dist files
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - name: build dist
+        run: uv build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artifacts
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    name: create Github release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: softprops/action-gh-release@v2
+
+  publish:
+    name: release to pypi
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: pypi-release
+      url: https://pypi.org/project/pytest-iam/
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: artifacts
+          path: dist
+
+      - name: Push build artifacts to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

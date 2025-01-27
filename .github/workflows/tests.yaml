@@ -2,27 +2,68 @@
 name: tests
 on:
   push:
+    branches:
+      - main
+      - '*.*.*'
   pull_request:
+    branches:
+      - main
+      - '*.*.*'
 
 jobs:
   tests:
-    name: ${{ matrix.python }}
+    name: py${{ matrix.python }} unit tests
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         python:
+          - '3.13'
           - '3.12'
           - '3.11'
           - '3.10'
           - '3.9'
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
         with:
-          python-version: ${{ matrix.python }}
-          cache: 'poetry'
-      - run: poetry install
-      - run: poetry run pytest
+          enable-cache: true
+      - name: Install Python ${{ matrix.python }}
+        run: uv python install ${{ matrix.python }}
+      - name: Install dependencies
+        run: uv sync --all-extras
+      - name: Run tests
+        run: uv run pytest --showlocals
+
+  minversions:
+    name: minimum dependency versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - name: Install minimum dependencies
+        run: uv sync --resolution=lowest-direct --all-extras
+      - name: Run tests
+        run: uv run pytest --showlocals
+
+  style:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: pre-commit/action@v3.0.1
+
+  doc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --group doc
+      - run: uv run sphinx-build doc build/sphinx/html

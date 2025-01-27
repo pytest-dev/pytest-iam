@@ -1,12 +1,12 @@
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.poetry]
+[project]
 name = "pytest-iam"
 version = "0.1.0"
 description = "A fully functional OAUTH2 / OpenID Connect (OIDC) server to be used in your testsuite"
-authors = ["Yaal Coop <contact@yaal.coop>"]
+authors = [{name="Yaal Coop", email="contact@yaal.coop"}]
 license = "MIT"
 readme = "README.md"
 packages = [{include = "pytest_iam"}]
@@ -29,30 +29,32 @@ classifiers = [
 repository = "https://github.com/pytest-dev/pytest-iam"
 documentation = "https://pytest-iam.readthedocs.io/en/latest/"
 
-[tool.poetry.dependencies]
-python = "^3.9"
-canaille = {version = ">=0.0.54,<1", extras = ["oidc"] }
-portpicker = ">=1.6.0"
-pytest = ">=7.0.0"
-faker = ">=21.0.0"
+requires-python = ">=3.9"
+dependencies = [
+    "canaille[oidc]==0.0.54",
+    "portpicker>=1.6.0",
+    "pytest>=7.0.0",
+    "faker>=21.0.0",
+]
 
-[tool.poetry.plugins.pytest11]
+[dependency-groups]
+dev = [
+    "authlib>=1.2.1",
+    "pre-commit-uv>=4.1.4",
+    "pytest-cov>=6.0.0",
+    "requests>=2.31.0",
+    "tox-uv>=1.16.0",
+]
+
+doc = [
+    "myst-parser>=3.0.0",
+    "shibuya>=2024.7.13",
+    "sphinx>=7.0.0",
+    "sphinx-issues>=4.0.0",
+]
+
+[project.entry-points."pytest11"]
 iam = "pytest_iam"
-
-[tool.poetry.group.dev.dependencies]
-authlib = "^1.2.1"
-pytest-cov = "^6.0.0"
-requests = "^2.31.0"
-types-requests = "*"
-
-[tool.poetry.group.doc]
-optional = true
-
-[tool.poetry.group.doc.dependencies]
-myst-parser = "^3.0.0"
-shibuya = "^2024.7.13"
-sphinx = "^7.0.0"
-sphinx-issues = "^4.0.0"
 
 [tool.ruff.lint]
 select = [
@@ -85,31 +87,39 @@ force-single-line = true
 docstring-code-format = true
 
 [tool.tox]
-legacy_tox_ini = """
-[tox]
-isolated_build = true
-skipsdist = true
-envlist =
-    style
-    py39
-    py310
-    py311
-    py312
-    doc
+requires = ["tox>=4.19"]
+env_list = [
+    "doc",
+    "style",
+    "py39",
+    "py310",
+    "py311",
+    "py312",
+    "py313",
+    "minversions",
+]
 
-[testenv]
-allowlist_externals = poetry
-commands =
-    poetry install
-    poetry run pytest {posargs}
+[tool.tox.env_run_base]
+runner = "uv-venv-lock-runner"
+with_dev = true
+commands = [
+    ["pytest", "--showlocals", "--full-trace", "{posargs}"],
+]
 
-[testenv:doc]
-commands =
-    poetry install --with doc --without dev
-    poetry run sphinx-build doc build/sphinx/html
+[tool.tox.env.style]
+runner = "uv-venv-runner"
+commands = [
+    ["pre-commit", "run", "--all-files", "--show-diff-on-failure"],
+]
 
-[testenv:style]
-commands =
-    pip install pre-commit
-    pre-commit run --all-files
-"""
+[tool.tox.env.minversions]
+runner = "uv-venv-lock-runner"
+with_dev = true
+uv_resolution = "lowest-direct"
+
+[tool.tox.env.doc]
+dependency_groups = ["doc"]
+commands = [
+    ["sphinx-build", "--builder", "html", "doc", "build/sphinx/html"],
+    ["sphinx-build", "--builder", "man", "doc", "build/sphinx/html"],
+]
