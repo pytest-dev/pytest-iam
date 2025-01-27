@@ -20,7 +20,7 @@ Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<pa
 ### Changed
 
 - Configuration is read from `.pytest-iam.env`
-- Configuration is read from enviroment vars prefixed by `PYTEST_IAM_`
+- Configuration is read from environment vars prefixed by `PYTEST_IAM_`
 
 ## [0.0.11] - 2024-04-22
 
@@ -61,7 +61,7 @@ Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<pa
 
 ### Fixed
 
-- python <=3.8 uncompatible typing
+- python <=3.8 incompatible typing
 
 ## [0.0.5] - 2023-12-22
 

@@ -31,7 +31,7 @@ copyright = f"{year}, Yaal Coop"
 author = "Yaal Coop"
 
 release = metadata.version("pytest_iam")
-version = "%s.%s" % tuple(map(int, release.split(".")[:2]))
+version = "{}.{}".format(*tuple(map(int, release.split(".")[:2])))
 language = "en"
 exclude_patterns = []
 pygments_style = "sphinx"

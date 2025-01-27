@@ -54,7 +54,7 @@ class Server:
         return f"http://localhost:{self.port}/"
 
     def random_user(self, **kwargs) -> User:
-        """Generates a :class:`~canaille.core.models.User` with random values.
+        """Generate a :class:`~canaille.core.models.User` with random values.
 
         Any parameter will be used instead of a random value.
         """
@@ -66,7 +66,7 @@ class Server:
         return user
 
     def random_group(self, **kwargs) -> Group:
-        """Generates a :class:`~canaille.core.models.Group` with random values.
+        """Generate a :class:`~canaille.core.models.Group` with random values.
 
         Any parameter will be used instead of a random value.
         """
@@ -78,8 +78,7 @@ class Server:
         return group
 
     def random_token(self, subject, client, **kwargs) -> Token:
-        """Generates a test :class:`~canaille.oidc.basemodels.Token` with
-        random values.
+        """Generate a test :class:`~canaille.oidc.basemodels.Token` with random values.
 
         Any parameter will be used instead of a random value.
         """
@@ -103,7 +102,7 @@ class Server:
         return token
 
     def login(self, user):
-        """Opens a session for the user in the IAM session.
+        """Open a session for the user in the IAM session.
 
         This allows to skip the connection screen.
         """
@@ -114,7 +113,6 @@ class Server:
 
         :param client: If :const:`None`, all existing clients are consented.
         """
-
         with self.app.app_context():
             clients = [client] if client else self.backend.query(models.Client)
 
@@ -141,9 +139,7 @@ class Server:
 
 @pytest.fixture(scope="session")
 def iam_configuration(tmp_path_factory) -> dict[str, Any]:
-    """Fixture for editing the configuration of
-    :meth:`~pytest_iam.iam_server`."""
-
+    """Fixture for editing the configuration of :meth:`~pytest_iam.iam_server`."""
     private_key, public_key = generate_keypair()
     return {
         "TESTING": True,
@@ -185,9 +181,7 @@ def iam_configuration(tmp_path_factory) -> dict[str, Any]:
 
 @pytest.fixture(scope="session")
 def iam_server(iam_configuration) -> Server:
-    """Fixture that creates a Canaille server listening a random port in a
-    thread."""
-
+    """Fixture that creates a Canaille server listening a random port in a thread."""
     port = portpicker.pick_unused_port()
     app = create_app(
         config=iam_configuration, env_file=".pytest-iam.env", env_prefix="PYTEST_IAM_"

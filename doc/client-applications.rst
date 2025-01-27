@@ -17,7 +17,7 @@ Users & groups
 ~~~~~~~~~~~~~~
 
 You can use the available :class:`~canaille.core.models.User` and :class:`~canaille.core.models.Group` models to set up their
-IAM server for your tests. Optionnally you can put them in pytest fixtures so they are re-usable:
+IAM server for your tests. Optionally you can put them in pytest fixtures so they are reusable:
 
 
 .. code:: python
