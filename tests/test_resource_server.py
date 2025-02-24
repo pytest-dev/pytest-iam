@@ -11,7 +11,7 @@ from flask import Flask
 def app(iam_server, client):
     app = Flask(__name__)
     app.config["SECRET_KEY"] = str(uuid.uuid4())
-    app.config["SERVER_NAME"] = "example.org"
+    app.config["SERVER_NAME"] = "resource-server.test"
 
     class MyIntrospectTokenValidator(IntrospectTokenValidator):
         def introspect_token(self, token_string):

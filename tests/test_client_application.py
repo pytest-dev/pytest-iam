@@ -18,8 +18,8 @@ def test_client_dynamic_registration(iam_server):
         f"{iam_server.url}/oauth/register",
         json={
             "client_name": "Nubla Dashboard",
-            "client_uri": "http://example.org",
-            "redirect_uris": ["http://example.org/authorize"],
+            "client_uri": "http://client.test",
+            "redirect_uris": ["http://client.test/authorize"],
             "grant_types": ["authorization_code"],
             "response_types": ["code", "token", "id_token"],
             "token_endpoint_auth_method": "client_secret_basic",
@@ -39,8 +39,8 @@ def test_logs(iam_server, caplog):
         f"{iam_server.url}/oauth/register",
         json={
             "client_name": "Nubla Dashboard",
-            "client_uri": "http://example.org",
-            "redirect_uris": ["http://example.org/authorize"],
+            "client_uri": "http://client.test",
+            "redirect_uris": ["http://client.test/authorize"],
             "grant_types": ["authorization_code"],
             "response_types": ["code", "token", "id_token"],
             "token_endpoint_auth_method": "client_secret_basic",
@@ -59,7 +59,7 @@ def test_logs(iam_server, caplog):
 def app(iam_server, client):
     app = Flask(__name__)
     app.config["SECRET_KEY"] = str(uuid.uuid4())
-    app.config["SERVER_NAME"] = "example.org"
+    app.config["SERVER_NAME"] = "client.test"
 
     oauth = OAuth()
     oauth.init_app(app)
