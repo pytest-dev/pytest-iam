@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+## [0.1.1] - 2025-04-04
+
+### Changed
+
+- Update to Canaille 0.0.70.
+- Disable http access logs.
+
 ## [0.1.0] - 2024-07-25
 
 ### Changed

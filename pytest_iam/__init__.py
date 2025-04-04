@@ -5,6 +5,7 @@ import uuid
 import wsgiref.simple_server
 from types import ModuleType
 from typing import Any
+from wsgiref.simple_server import WSGIRequestHandler
 
 import portpicker
 import pytest
@@ -36,11 +37,17 @@ class Server:
     backend: Backend
     """The backend used to manage models."""
 
-    def __init__(self, app, port: int, backend: Backend):
+    logging: bool = False
+    """Whether the request access log is enabled."""
+
+    def __init__(self, app, port: int, backend: Backend, logging: bool = False):
         self.app = app
         self.backend = backend
         self.port = port
-        self.httpd = wsgiref.simple_server.make_server("localhost", port, app)
+        self.logging = logging
+        self.httpd = wsgiref.simple_server.make_server(
+            "localhost", port, app, handler_class=self.make_request_handler()
+        )
         self.models = models
         self.logged_user = None
 
@@ -48,6 +55,16 @@ class Server:
         def logged_user():
             if self.logged_user:
                 g.user = self.logged_user
+
+    def make_request_handler(self):
+        server = self
+
+        class RequestHandler(WSGIRequestHandler):
+            def log_request(self, code="-", size="-"):
+                if server.logging:
+                    super().log_request(code, size)
+
+        return RequestHandler
 
     @property
     def url(self) -> str:
