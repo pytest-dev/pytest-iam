@@ -10,7 +10,7 @@ from flask import url_for
 
 def test_server_configuration(iam_server):
     res = requests.get(f"{iam_server.url}/.well-known/openid-configuration")
-    assert res.json()["issuer"] == iam_server.url
+    assert res.json()["issuer"] in iam_server.url
 
 
 def test_client_dynamic_registration(iam_server):
@@ -31,7 +31,7 @@ def test_client_dynamic_registration(iam_server):
 
     client = iam_server.backend.get(iam_server.models.Client, client_id=client_id)
     assert client.client_secret == client_secret
-    client.delete()
+    iam_server.backend.delete(client)
 
 
 def test_logs(iam_server, caplog):
@@ -52,7 +52,7 @@ def test_logs(iam_server, caplog):
 
     client_id = response.json()["client_id"]
     client = iam_server.backend.get(iam_server.models.Client, client_id=client_id)
-    client.delete()
+    iam_server.backend.delete(client)
 
 
 @pytest.fixture

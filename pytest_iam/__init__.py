@@ -1,4 +1,5 @@
 import datetime
+import os
 import threading
 import uuid
 import wsgiref.simple_server
@@ -138,14 +139,21 @@ class Server:
 
 
 @pytest.fixture(scope="session")
-def iam_configuration(tmp_path_factory) -> dict[str, Any]:
+def iam_server_port():
+    return portpicker.pick_unused_port()
+
+
+@pytest.fixture(scope="session")
+def iam_configuration(tmp_path_factory, iam_server_port) -> dict[str, Any]:
     """Fixture for editing the configuration of :meth:`~pytest_iam.iam_server`."""
     private_key, public_key = generate_keypair()
+    os.environ["AUTHLIB_INSECURE_TRANSPORT"] = "1"
     return {
         "TESTING": True,
         "ENV_FILE": None,
         "SECRET_KEY": str(uuid.uuid4()),
         "WTF_CSRF_ENABLED": False,
+        "SERVER_NAME": f"localhost:{iam_server_port}",
         "CANAILLE": {
             "JAVASCRIPT": False,
             "ACL": {
@@ -180,13 +188,12 @@ def iam_configuration(tmp_path_factory) -> dict[str, Any]:
 
 
 @pytest.fixture(scope="session")
-def iam_server(iam_configuration) -> Server:
+def iam_server(iam_configuration, iam_server_port) -> Server:
     """Fixture that creates a Canaille server listening a random port in a thread."""
-    port = portpicker.pick_unused_port()
     app = create_app(
         config=iam_configuration, env_file=".pytest-iam.env", env_prefix="PYTEST_IAM_"
     )
-    server = Server(app, port, Backend.instance)
+    server = Server(app, iam_server_port, Backend.instance)
 
     server_thread = threading.Thread(target=server.httpd.serve_forever)
     server_thread.start()
