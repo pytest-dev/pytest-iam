@@ -5,12 +5,12 @@ build-backend = "hatchling.build"
 [project]
 name = "pytest-iam"
 version = "0.1.1"
-description = "A fully functional OAUTH2 / OpenID Connect (OIDC) server to be used in your testsuite"
+description = "A fully functional OAUTH2 / OpenID Connect (OIDC) / SCIM server to be used in your testsuite"
 authors = [{name="Yaal Coop", email="contact@yaal.coop"}]
 license = "MIT"
 readme = "README.md"
 packages = [{include = "pytest_iam"}]
-keywords = ["oidc", "oauth", "oauth2", "openid", "identity", "pytest", "unit tests", "iam"]
+keywords = ["oidc", "oauth", "oauth2", "openid", "identity", "pytest", "unit tests", "iam", "scim"]
 classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 4 - Beta",
