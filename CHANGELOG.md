@@ -13,6 +13,7 @@ Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<pa
 
 - Implement `test_client` attribute.
 - Implement `logout` method.
+- Support for OIDC `create` prompt.
 
 ## [0.1.1] - 2025-04-04
 

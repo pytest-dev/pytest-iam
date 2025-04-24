@@ -76,6 +76,12 @@ def app(iam_server, client):
             url_for("authorize", _external=True)
         )
 
+    @app.route("/create")
+    def create():
+        return oauth.authorization_server.authorize_redirect(
+            url_for("authorize", _external=True), prompt="create"
+        )
+
     @app.route("/authorize")
     def authorize():
         token = oauth.authorization_server.authorize_access_token()
@@ -139,10 +145,48 @@ def test_prelogin_and_preconsent(iam_server, client, user, test_client):
     # return to the client with a code
     res = test_client.get(res.location)
 
+    iam_server.logout()
+
+
+def test_account_creation(iam_server, client, test_client):
+    # access to the client account creation page
+    res = test_client.get("/create")
+
+    # redirection to the IAM account creation page
+    res = iam_server.test_client.get(res.location)
+
+    # redirection to the account creation page
+    res = iam_server.test_client.get(res.location)
+
+    payload = {
+        "user_name": "user",
+        "given_name": "John",
+        "family_name": "Doe",
+        "emails-0": "email@example.com",
+        "preferred_language": "auto",  # appears to be mandatory
+        "password1": "correct horse battery staple",
+        "password2": "correct horse battery staple",
+    }
+
+    # fill the registration form
+    res = iam_server.test_client.post(res.location, data=payload)
+
+    # fill the 'consent' form
+    res = iam_server.test_client.post(res.location, data={"answer": "accept"})
+
+    authorization = iam_server.backend.get(iam_server.models.AuthorizationCode)
+    assert authorization.client == client
+
+    # return to the client with a code
+    res = test_client.get(res.location)
+
     token = iam_server.backend.get(iam_server.models.Token)
     assert token.client == client
 
     assert res.json["userinfo"]["sub"] == "user"
     assert res.json["access_token"] == token.access_token
+
+    user = iam_server.backend.get(iam_server.models.User)
+    assert user.user_name == "user"
 
     iam_server.logout()

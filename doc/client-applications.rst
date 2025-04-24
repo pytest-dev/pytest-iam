@@ -109,8 +109,8 @@ client registration. Here is an example of dynamic registration you can implemen
     client_id = response.json["client_id"]
     client_secret = response.json["client_secret"]
 
-Nominal authentication case
----------------------------
+Nominal authentication workflow
+-------------------------------
 
 Let us suppose that your application have a ``/protected`` that redirects users
 to the IAM server if unauthenticated.
@@ -180,8 +180,8 @@ They allow you to skip the login, password and consent pages:
         # 4. now you have access to the protected page
         res = test_client.get("/protected")
 
-Error cases
------------
+Authentication workflow errors
+------------------------------
 
 The `OAuth2 <https://datatracker.ietf.org/doc/html/rfc6749>`_ and the `OpenID Connect <https://openid.net/specs/openid-connect-core-1_0.html>`_ specifications details how things might go wrong:
 
@@ -209,3 +209,49 @@ The `OIDC error codes <https://openid.net/specs/openid-connect-core-1_0.html#Aut
 
 You might or might not be interested in testing how your application behaves when it encounters those situations,
 depending on the situation and how much you trust the libraries that helps your application perform the authentication process.
+
+Account creation workflow
+-------------------------
+
+The `Initiating User Registration via OpenID Connect 1.0 <https://openid.net/specs/openid-connect-prompt-create-1_0.html>`_
+specification details how to initiate an account creation workflow at the IAM
+by setting the ``prompt=create`` authorization request parameter.
+
+In the following example, we suppose that the ``/create`` endpoint redirects
+to the IAM authorization endpoint with the ``prompt=create`` parameters.
+
+.. code-block:: python
+    :caption: Account creation workflow
+
+    def test_account_creation(iam_server, client, test_client):
+        # access to the client account creation page
+        res = test_client.get("/create")
+
+        # redirection to the IAM account creation page
+        res = iam_server.test_client.get(res.location)
+
+        # redirection to the account creation page
+        res = iam_server.test_client.get(res.location)
+
+        payload = {
+            "user_name": "user",
+            "given_name": "John",
+            "family_name": "Doe",
+            "emails-0": "email@example.com",
+            "preferred_language": "auto", # appears to be mandatory
+            "password1": "correct horse battery staple",
+            "password2": "correct horse battery staple",
+        }
+
+        # fill the registration form
+        res = iam_server.test_client.post(res.location, data=payload)
+
+        # fill the 'consent' form
+        res = iam_server.test_client.post(res.location, data={"answer": "accept"})
+
+        # return to the client with a code
+        res = test_client.get(res.location)
+
+        assert "User account successfully created" in res.text
+
+Unfortunately there is no helpers for account creation in the fashion of :meth:`~pytest_iam.Server.login`.
