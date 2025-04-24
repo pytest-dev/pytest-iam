@@ -25,7 +25,7 @@ def user(iam_server):
         user_name="user",
         formatted_name="John Doe",
         emails=["email@example.com"],
-        password="password",
+        password="correct horse battery staple",
     )
     iam_server.backend.save(inst)
     yield inst

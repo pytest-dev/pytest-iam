@@ -20,6 +20,7 @@ from canaille.oidc.basemodels import Token
 from canaille.oidc.installation import generate_keypair
 from flask import Flask
 from flask import g
+from werkzeug.test import Client
 
 
 class Server:
@@ -31,6 +32,9 @@ class Server:
     app: Flask
     """The authorization server flask app."""
 
+    test_client: Client
+    """A test client to interact with the IAM without performing real network requests."""
+
     models: ModuleType
     """The module containing the available model classes."""
 
@@ -40,8 +44,9 @@ class Server:
     logging: bool = False
     """Whether the request access log is enabled."""
 
-    def __init__(self, app, port: int, backend: Backend, logging: bool = False):
+    def __init__(self, app: Flask, port: int, backend: Backend, logging: bool = False):
         self.app = app
+        self.test_client = app.test_client()
         self.backend = backend
         self.port = port
         self.logging = logging
@@ -50,11 +55,25 @@ class Server:
         )
         self.models = models
         self.logged_user = None
+        self.login_datetime = None
 
         @self.app.before_request
         def logged_user():
             if self.logged_user:
                 g.user = self.logged_user
+            else:
+                try:
+                    del g.user
+                except AttributeError:
+                    pass
+
+            if self.login_datetime:
+                g.last_login_datetime = self.login_datetime
+            else:
+                try:
+                    del g.last_login_datetime
+                except AttributeError:
+                    pass
 
     def make_request_handler(self):
         server = self
@@ -125,6 +144,12 @@ class Server:
         This allows to skip the connection screen.
         """
         self.logged_user = user
+        self.login_datetime = datetime.datetime.now(datetime.timezone.utc)
+
+    def logout(self):
+        """Close the current user session if existing."""
+        self.logged_user = None
+        self.login_datetime = None
 
     def consent(self, user, client=None):
         """Make a user consent to share data with OIDC clients.
@@ -172,6 +197,7 @@ def iam_configuration(tmp_path_factory, iam_server_port) -> dict[str, Any]:
         "WTF_CSRF_ENABLED": False,
         "SERVER_NAME": f"localhost:{iam_server_port}",
         "CANAILLE": {
+            "ENABLE_REGISTRATION": True,
             "JAVASCRIPT": False,
             "ACL": {
                 "DEFAULT": {

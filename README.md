@@ -36,19 +36,19 @@ def test_authentication(iam_server, testapp, client):
     # create a random user on the IAM server
     user = iam_server.random_user()
 
-    # logs the user in give its consent to your application
-    iam_server.login(user)
-    iam_server.consent(user)
+    # 1. attempt to access a protected page, returns a redirection to the IAM
+    res = test_client.get("/protected")
 
-    # simulate an attempt to access a protected page of your app
-    response = testapp.get("/protected", status=302)
+    # 2. authorization code request
+    res = iam_server.test_client.get(res.location)
 
-    # get an authorization code request at the IAM
-    res = requests.get(res.location, allow_redirects=False)
+    # 3. load your application authorization endpoint
+    res = test_client.get(res.location)
 
-    # access to the redirection URI
-    res = testclient.get(res.headers["Location"])
-    res.mustcontain("Hello World!")
+    # 4. now you have access to the protected page
+    res = test_client.get("/protected")
+
+    assert "Hello, world!" in res.text
 ```
 
 Check the [client application](https://pytest-iam.readthedocs.io/en/latest/client-applications.html) or
