@@ -2,7 +2,7 @@ Client applications
 ===================
 
 If you are writing a client application, you will probably want to test the nominal authentication case,
-i.e. the case when the users successfully logs in and give their consent to your application.
+i.e. the case when the users successfully log in and give their consent to your application.
 Depending on your implementation, you might also need to test how your application behaves in case
 of error during the authentication process.
 
@@ -16,7 +16,7 @@ Setting up your test
 Users & groups
 ~~~~~~~~~~~~~~
 
-You can use the available :class:`~canaille.core.models.User` and :class:`~canaille.core.models.Group` models to set up their
+You can use the available :class:`~canaille.core.models.User` and :class:`~canaille.core.models.Group` models to set up the
 IAM server for your tests. Optionally you can put them in pytest fixtures so they are reusable:
 
 
@@ -65,7 +65,7 @@ If you don't care about the data your users and group, you can use the available
 OIDC Client registration
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Before your application can authenticate against the IAM server, it must register and give provide details
+Before your application can authenticate against the IAM server, it must register and provide details
 such as the allowed redirection URIs. To achieve this you can use the :class:`~canaille.oidc.basemodels.Client`
 model. Let us suppose your application have a ``/authorize`` endpoint for the authorization code - token exchange:
 
@@ -88,6 +88,12 @@ model. Let us suppose your application have a ``/authorize`` endpoint for the au
         yield inst
         iam_server.backend.delete(inst)
 
+.. note::
+
+   Canaille has a :attr:`~canaille.oidc.basemodels.Client.trusted` parameter.
+   When it is :data:`True` for a client, end-users won't be showed a consent page
+   when the client redirect them to the IAM authorization page.
+
 Note that the IAM implements the `OAuth2/OIDC dynamic client registration protocol <https://datatracker.ietf.org/doc/html/rfc7591>`_,
 thus you might not need a client fixture if your application dynamically register one. No *initial token* is needed to use dynamic
 client registration. Here is an example of dynamic registration you can implement in your application:
@@ -109,18 +115,12 @@ client registration. Here is an example of dynamic registration you can implemen
     client_id = response.json["client_id"]
     client_secret = response.json["client_secret"]
 
-.. note::
-
-   Canaille has a :attr:`~canaille.oidc.basemodels.Client.trusted` parameter.
-   When it is :data:`True` for a client, end-users won't be showed a consent page
-   when the client redirect them to the IAM authorization page.
-
 Nominal authentication workflow
 -------------------------------
 
-Let us suppose that your application have a ``/protected`` that redirects users
+Let us suppose that your application have a ``/protected`` endpoint tthat redirects users
 to the IAM server if unauthenticated.
-We suppose you have a test client fixture like werkzeug :class:`~werkzeug.test.Client`
+We suppose that you have a `test_client` fixture like werkzeug :class:`~werkzeug.test.Client`
 that allows to test your application endpoints without real HTTP requests.
 pytest-iam provides its own test client, available with :meth:`~pytest_iam.Server.test_client`.
 Let us see how to implement an authorization_code authentication test case:
