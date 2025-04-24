@@ -118,7 +118,7 @@ client registration. Here is an example of dynamic registration you can implemen
 Nominal authentication workflow
 -------------------------------
 
-Let us suppose that your application have a ``/protected`` endpoint tthat redirects users
+Let us suppose that your application have a ``/protected`` endpoint that redirects users
 to the IAM server if unauthenticated.
 We suppose that you have a `test_client` fixture like werkzeug :class:`~werkzeug.test.Client`
 that allows to test your application endpoints without real HTTP requests.
