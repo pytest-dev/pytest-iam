@@ -10,7 +10,7 @@ Reference
     :show-inheritance:
     :undoc-members:
 
-.. automodule:: canaille.backends.models
+.. autoclass:: canaille.backends.models.Model
     :members:
     :show-inheritance:
     :undoc-members:
