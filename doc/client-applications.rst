@@ -94,8 +94,8 @@ client registration. Here is an example of dynamic registration you can implemen
 
 .. code:: python
 
-    response = requests.post(
-        f"{iam_server.url}/oauth/register",
+    response = iam_server.test_client.post(
+        "/oauth/register",
         json={
             "client_name": "My application",
             "client_uri": "http://example.org",
@@ -106,53 +106,79 @@ client registration. Here is an example of dynamic registration you can implemen
             "scope": "openid profile groups",
         },
     )
-    client_id = response.json()["client_id"]
-    client_secret = response.json()["client_secret"]
+    client_id = response.json["client_id"]
+    client_secret = response.json["client_secret"]
 
 Nominal authentication case
 ---------------------------
 
 Let us suppose that your application have a ``/protected`` that redirects users
-to the IAM server if unauthenticated. With your :class:`~canaille.core.models.User`
-and :class:`~canaille.oidc.models.Client` fixtures, you can use the
-:meth:`~pytest_iam.Server.login` and :meth:`~pytest_iam.Server.consent` methods
-to skip the login and the consent page from the IAM.
-
+to the IAM server if unauthenticated.
 We suppose you have a test client fixture like werkzeug :class:`~werkzeug.test.Client`
-that allows to test your application endpoints without real HTTP requests. Let
-us see how to implement an authorization_code authentication test case:
+that allows to test your application endpoints without real HTTP requests.
+pytest-iam provides its own test client, available with :meth:`~pytest_iam.Server.test_client`.
+Let us see how to implement an authorization_code authentication test case:
 
-.. code:: python
+.. code-block:: python
+   :caption: Full login and consent workflow to get an access token
 
-    def test_login_and_consent(iam_server, client, user, testclient):
+    def test_login_and_consent(iam_server, client, user, test_client):
+        # 1. attempt to access a protected page
+        res = test_client.get("/protected")
+
+        # 2. redirect to the authorization server login page
+        res = iam_server.test_client.get(res.location)
+
+        # 3. fill the 'login' form at the IAM
+        res = iam_server.test_client.post(res.location, data={"login": "user"})
+
+        # 4. fill the 'password' form at the IAM
+        res = iam_server.test_client.post(
+            res.location, data={"password": "correct horse battery staple"}
+        )
+
+        # 5. fill the 'consent' form at the IAM
+        res = iam_server.test_client.post(res.location, data={"answer": "accept"})
+
+        # 6. load your application authorization endpoint
+        res = test_client.get(res.location)
+
+        # 7. now you have access to the protected page
+        res = test_client.get("/protected")
+
+What happened?
+
+1. A simulation of an access to a protected page on your application. As the page is protected,
+   it returns a redirection to the IAM login page.
+2. The IAM test client loads the login page and get redirected to the login form.
+3. The login form is filled, and returns a redirection to the password form.
+4. The password form is filled, and returns a redirection to the consent form.
+5. The consent form is filled, and return a redirection to your application authorization endpoint with a OAuth code grant.
+6. You client authorization endpoint is loaded, it reaches the IAM and exchanges the code grant with a token.   This is generally where you fill the session to keep users logged in.
+7. The protected page is loaded, and now you should be able to access it.
+
+Steps 2, 3 and 4 can be quite redundant, so pytest-iam provides shortcuts with the
+:meth:`~pytest_iam.Server.login` and :meth:`~pytest_iam.Server.consent` methods.
+They allow you to skip the login, password and consent pages:
+
+.. code-block:: python
+   :caption: Fast login and consent workflow to get an access token
+
+    def test_login_and_consent(iam_server, client, user, test_client):
         iam_server.login(user)
         iam_server.consent(user)
 
         # 1. attempt to access a protected page
-        res = testclient.get("/protected", status=302)
+        res = test_client.get("/protected")
 
         # 2. authorization code request
-        res = requests.get(res.location, allow_redirects=False)
+        res = iam_server.test_client.get(res.location)
 
         # 3. load your application authorization endpoint
-        res = testclient.get(res.headers["Location"], status=302)
+        res = test_client.get(res.location)
 
-        # 4. redirect to the protected page
-        res = res.follow(status=200)
-
-What happened?
-
-1. A simulation of an access to a protected page on your application.
-2. That redirects to the IAM authorization endpoint. Since the users are already
-   logged and their consent already given, the IAM redirects to your application
-   authorization configured redirect_uri, with the authorization code passed in
-   the query string. Note that ``requests`` is used in this example to perform
-   the request. Indeed, generally testclient such as the werkzeug one cannot
-   perform real HTTP requests.
-3. Access your application authorization endpoint that will exchange the
-   authorization code against a token and check the user credentials.
-4. For instance, your application can redirect the users back to the page
-   they attempted to access in the first place.
+        # 4. now you have access to the protected page
+        res = test_client.get("/protected")
 
 Error cases
 -----------

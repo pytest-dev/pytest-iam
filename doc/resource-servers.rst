@@ -8,16 +8,16 @@ request against the identity server token introspection endpoint.
 
 .. code:: python
 
-    def test_valid_token_auth(iam_server, testclient, client, user):
+    def test_valid_token_auth(iam_server, test_client, client, user):
         token = iam_server.random_token(client=client, subject=user)
-        res = testclient.get(
+        res = test_client.get(
             "/protected-resource", headers={"Authorization": f"Bearer {token.access_token}"}
         )
         assert res.status_code == 200
 
 
-    def test_invalid_token_auth(iam_server, testclient):
-        res = testclient.get(
+    def test_invalid_token_auth(iam_server, test_client):
+        res = test_client.get(
             "/protected-resource", headers={"Authorization": "Bearer invalid"}
         )
         assert res.status_code == 401

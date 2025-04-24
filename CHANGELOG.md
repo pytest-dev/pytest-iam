@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+## [0.2.0] - Unreleased
+
+### Added
+
+- Implement `test_client` attribute.
+- Implement `logout` method.
+
 ## [0.1.1] - 2025-04-04
 
 ### Changed

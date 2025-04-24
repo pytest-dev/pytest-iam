@@ -1,7 +1,6 @@
 import uuid
 
 import pytest
-import requests
 from authlib.integrations.flask_client import OAuth
 from flask import Flask
 from flask import jsonify
@@ -9,13 +8,13 @@ from flask import url_for
 
 
 def test_server_configuration(iam_server):
-    res = requests.get(f"{iam_server.url}/.well-known/openid-configuration")
-    assert res.json()["issuer"] in iam_server.url
+    res = iam_server.test_client.get("/.well-known/openid-configuration")
+    assert res.json["issuer"] in iam_server.url
 
 
 def test_client_dynamic_registration(iam_server):
-    response = requests.post(
-        f"{iam_server.url}/oauth/register",
+    response = iam_server.test_client.post(
+        "/oauth/register",
         json={
             "client_name": "Nubla Dashboard",
             "client_uri": "http://client.test",
@@ -26,8 +25,8 @@ def test_client_dynamic_registration(iam_server):
             "scope": "openid profile groups",
         },
     )
-    client_id = response.json()["client_id"]
-    client_secret = response.json()["client_secret"]
+    client_id = response.json["client_id"]
+    client_secret = response.json["client_secret"]
 
     client = iam_server.backend.get(iam_server.models.Client, client_id=client_id)
     assert client.client_secret == client_secret
@@ -35,8 +34,8 @@ def test_client_dynamic_registration(iam_server):
 
 
 def test_logs(iam_server, caplog):
-    response = requests.post(
-        f"{iam_server.url}/oauth/register",
+    response = iam_server.test_client.post(
+        "/oauth/register",
         json={
             "client_name": "Nubla Dashboard",
             "client_uri": "http://client.test",
@@ -50,7 +49,7 @@ def test_logs(iam_server, caplog):
 
     assert caplog.records[0].msg == "client registration endpoint request: POST: %s"
 
-    client_id = response.json()["client_id"]
+    client_id = response.json["client_id"]
     client = iam_server.backend.get(iam_server.models.Client, client_id=client_id)
     iam_server.backend.delete(client)
 
@@ -86,28 +85,64 @@ def app(iam_server, client):
 
 
 @pytest.fixture
-def testclient(app):
+def test_client(app):
     app.config["TESTING"] = True
     return app.test_client()
 
 
-def test_login_and_consent(iam_server, client, user, testclient):
-    iam_server.login(user)
-    iam_server.consent(user)
+def test_login_and_consent(iam_server, client, user, test_client):
+    # 1. attempt to access a protected page
+    res = test_client.get("/login")
 
-    # attempt to access a protected page
-    res = testclient.get("/login")
+    # 2. redirect to the authorization server login page
+    res = iam_server.test_client.get(res.location)
 
-    # authorization code request (already logged in an consented)
-    res = requests.get(res.location, allow_redirects=False)
+    # 3. fill the 'login' form
+    res = iam_server.test_client.post(res.location, data={"login": "user"})
+
+    # 4. fill the 'password' form
+    res = iam_server.test_client.post(
+        res.location, data={"password": "correct horse battery staple"}
+    )
+
+    # 5. fill the 'consent' form
+    res = iam_server.test_client.post(res.location, data={"answer": "accept"})
 
     authorization = iam_server.backend.get(iam_server.models.AuthorizationCode)
     assert authorization.client == client
 
-    res = testclient.get(res.headers["Location"])
+    # 6. load your application authorization endpoint
+    res = test_client.get(res.location)
 
     token = iam_server.backend.get(iam_server.models.Token)
     assert token.client == client
 
     assert res.json["userinfo"]["sub"] == "user"
     assert res.json["access_token"] == token.access_token
+
+    iam_server.logout()
+
+
+def test_prelogin_and_preconsent(iam_server, client, user, test_client):
+    iam_server.login(user)
+    iam_server.consent(user)
+
+    # attempt to access a protected page
+    res = test_client.get("/login")
+
+    # authorization code request (already logged in an consented)
+    res = iam_server.test_client.get(res.location)
+
+    authorization = iam_server.backend.get(iam_server.models.AuthorizationCode)
+    assert authorization.client == client
+
+    # return to the client with a code
+    res = test_client.get(res.location)
+
+    token = iam_server.backend.get(iam_server.models.Token)
+    assert token.client == client
+
+    assert res.json["userinfo"]["sub"] == "user"
+    assert res.json["access_token"] == token.access_token
+
+    iam_server.logout()
