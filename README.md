@@ -36,6 +36,10 @@ def test_authentication(iam_server, test_client):
     # create a random user on the IAM server
     user = iam_server.random_user()
 
+    # log the user in and make it consent all the clients
+    iam_server.login(user)
+    iam_server.consent(user)
+
     # 1. attempt to access a protected page, returns a redirection to the IAM
     res = test_client.get("/protected")
 
