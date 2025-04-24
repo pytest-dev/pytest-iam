@@ -177,6 +177,7 @@ def iam_configuration(tmp_path_factory, iam_server_port) -> dict[str, Any]:
         "WTF_CSRF_ENABLED": False,
         "SERVER_NAME": f"localhost:{iam_server_port}",
         "CANAILLE": {
+            "ENABLE_REGISTRATION": True,
             "JAVASCRIPT": False,
             "ACL": {
                 "DEFAULT": {
