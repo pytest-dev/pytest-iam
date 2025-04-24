@@ -66,7 +66,7 @@ OIDC Client registration
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Before your application can authenticate against the IAM server, it must register and give provide details
-such as the allowed redirection URIs. To achieve this you can use the :class:`~canaille.oidc.models.Client`
+such as the allowed redirection URIs. To achieve this you can use the :class:`~canaille.oidc.basemodels.Client`
 model. Let us suppose your application have a ``/authorize`` endpoint for the authorization code - token exchange:
 
 .. code:: python
@@ -108,6 +108,12 @@ client registration. Here is an example of dynamic registration you can implemen
     )
     client_id = response.json["client_id"]
     client_secret = response.json["client_secret"]
+
+.. note::
+
+   Canaille has a :attr:`~canaille.oidc.basemodels.Client.trusted` parameter.
+   When it is :data:`True` for a client, end-users won't be showed a consent page
+   when the client redirect them to the IAM authorization page.
 
 Nominal authentication workflow
 -------------------------------
@@ -255,3 +261,12 @@ to the IAM authorization endpoint with the ``prompt=create`` parameters.
         assert "User account successfully created" in res.text
 
 Unfortunately there is no helpers for account creation in the fashion of :meth:`~pytest_iam.Server.login`.
+
+Provisioning
+------------
+
+The ``iam_server`` instance provides a `SCIM2 provisioning API <https://scim.libre.sh>`_ at the address ``/scim/v2``.
+You can use it to update your user profiles directly at the IAM.
+You can have a look to the :doc:`Canaille documentation <canaille:tutorial/provisioning>` to see implementation details.
+
+To perform SCIM requests you might be interested in tools such as `scim2-client <https://scim2-cli.readthedocs.io>`_.

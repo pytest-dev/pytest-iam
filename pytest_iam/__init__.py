@@ -51,7 +51,7 @@ class Server:
         self.port = port
         self.logging = logging
         self.httpd = wsgiref.simple_server.make_server(
-            "localhost", port, app, handler_class=self.make_request_handler()
+            "localhost", port, app, handler_class=self._make_request_handler()
         )
         self.models = models
         self.logged_user = None
@@ -75,7 +75,7 @@ class Server:
                 except AttributeError:
                     pass
 
-    def make_request_handler(self):
+    def _make_request_handler(self):
         server = self
 
         class RequestHandler(WSGIRequestHandler):
@@ -114,7 +114,7 @@ class Server:
 
         return group
 
-    def random_token(self, subject, client, **kwargs) -> Token:
+    def random_token(self, subject: User, client: Client, **kwargs) -> Token:
         """Generate a test :class:`~canaille.oidc.basemodels.Token` with random values.
 
         Any parameter will be used instead of a random value.
@@ -138,7 +138,7 @@ class Server:
 
         return token
 
-    def login(self, user):
+    def login(self, user: User):
         """Open a session for the user in the IAM session.
 
         This allows to skip the connection screen.
@@ -151,7 +151,7 @@ class Server:
         self.logged_user = None
         self.login_datetime = None
 
-    def consent(self, user, client=None):
+    def consent(self, user: User, client: Client | None = None):
         """Make a user consent to share data with OIDC clients.
 
         :param client: If :const:`None`, all existing clients are consented.
