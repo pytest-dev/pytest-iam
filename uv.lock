@@ -2,7 +2,8 @@ version = 1
 revision = 1
 requires-python = ">=3.10"
 resolution-markers = [
-    "python_full_version >= '3.11'",
+    "python_full_version >= '3.13'",
+    "python_full_version >= '3.11' and python_full_version < '3.13'",
     "python_full_version < '3.11'",
 ]
 
@@ -89,7 +90,7 @@ wheels = [
 
 [[package]]
 name = "canaille"
-version = "0.0.71"
+version = "0.0.74"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "blinker" },
@@ -100,9 +101,9 @@ dependencies = [
     { name = "pydantic-settings" },
     { name = "wtforms" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/47/e9/69b255af83c1397e2014dedd2effdfd2bf5bc4a5030712d142352cf90b35/canaille-0.0.71.tar.gz", hash = "sha256:e379721800cbdd7d0aabfb8b80ca3fbae856c29742a52e6ed61d70b0681a37b0", size = 4378775 }
+sdist = { url = "https://files.pythonhosted.org/packages/24/b6/661edfafefd503f40d5f0aad45e32c9d66d6f727f884ca19ae48f77c3239/canaille-0.0.74.tar.gz", hash = "sha256:a63706509b684714b0b69979bd6ad8cd8c9d4e8521e6c38c6a76c21d8debe46e", size = 4395200 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c5/55/774a9bff0f5ae840c4048cf4d9f0352c7b0a8b9f5ad229703997df68dd00/canaille-0.0.71-py3-none-any.whl", hash = "sha256:901e6124b928cb7896969c51806ac49f3a1b71509e8a6247a6c10b1e148cdbc8", size = 4597747 },
+    { url = "https://files.pythonhosted.org/packages/54/82/e39dd842fd13059d0046b94965e468421a69adae66ddf168cb52fd84d116/canaille-0.0.74-py3-none-any.whl", hash = "sha256:5e498d291342b3670113f59f2982853e63432f14eba3182b7595d12b014f8501", size = 4623196 },
 ]
 
 [package.optional-dependencies]
@@ -990,7 +991,7 @@ doc = [
 
 [package.metadata]
 requires-dist = [
-    { name = "canaille", extras = ["oidc"], specifier = ">=0.0.71" },
+    { name = "canaille", extras = ["oidc"], specifier = ">=0.0.74" },
     { name = "faker", specifier = ">=21.0.0" },
     { name = "portpicker", specifier = ">=1.6.0" },
     { name = "pytest", specifier = ">=7.0.0" },
@@ -1155,7 +1156,8 @@ name = "sphinx"
 version = "8.2.3"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.11'",
+    "python_full_version >= '3.13'",
+    "python_full_version >= '3.11' and python_full_version < '3.13'",
 ]
 dependencies = [
     { name = "alabaster", marker = "python_full_version >= '3.11'" },

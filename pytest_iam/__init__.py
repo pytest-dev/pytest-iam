@@ -40,7 +40,7 @@ class Server:
     logging: bool = False
     """Whether the request access log is enabled."""
 
-    def __init__(self, app, port: int, backend: Backend, logging: bool = False):
+    def __init__(self, app: Flask, port: int, backend: Backend, logging: bool = False):
         self.app = app
         self.backend = backend
         self.port = port
@@ -50,11 +50,15 @@ class Server:
         )
         self.models = models
         self.logged_user = None
+        self.login_datetime = None
 
         @self.app.before_request
         def logged_user():
             if self.logged_user:
                 g.user = self.logged_user
+
+            if self.login_datetime:
+                g.last_login_datetime = self.login_datetime
 
     def make_request_handler(self):
         server = self
@@ -125,6 +129,7 @@ class Server:
         This allows to skip the connection screen.
         """
         self.logged_user = user
+        self.login_datetime = datetime.datetime.now(datetime.timezone.utc)
 
     def consent(self, user, client=None):
         """Make a user consent to share data with OIDC clients.
