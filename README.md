@@ -32,7 +32,7 @@ To run a full authentication process for a client application in your test,
 you can write something like this:
 
 ```python
-def test_authentication(iam_server, testapp, client):
+def test_authentication(iam_server, test_client):
     # create a random user on the IAM server
     user = iam_server.random_user()
 
