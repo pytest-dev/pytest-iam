@@ -90,8 +90,8 @@ model. Let us suppose your application have a ``/authorize`` endpoint for the au
 
 .. note::
 
-   Canaille has a :attr:`~canaille.oidc.basemodels.Client.trusted` parameter.
-   When it is :data:`True` for a client, end-users won't be showed a consent page
+   Clients have a :attr:`~canaille.oidc.basemodels.Client.trusted` parameter.
+   When it is :data:`True`, end-users won't be showed a consent page
    when the client redirect them to the IAM authorization page.
 
 Note that the IAM implements the `OAuth2/OIDC dynamic client registration protocol <https://datatracker.ietf.org/doc/html/rfc7591>`_,
