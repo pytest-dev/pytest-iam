@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pytest-iam"
-version = "0.2.0"
+version = "0.2.1"
 description = "A fully functional OAUTH2 / OpenID Connect (OIDC) / SCIM server to be used in your testsuite"
 authors = [{name="Yaal Coop", email="contact@yaal.coop"}]
 license = "MIT"
