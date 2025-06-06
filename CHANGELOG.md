@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+## [0.2.1] - Unreleased
+
+### Fixed
+
+- Support for Canaille 0.0.75.
+
 ## [0.2.0] - 2025-04-24
 
 ### Added

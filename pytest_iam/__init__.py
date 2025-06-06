@@ -11,15 +11,16 @@ import portpicker
 import pytest
 from canaille import create_app
 from canaille.app import models
+from canaille.app.session import SessionObject
 from canaille.backends import Backend
 from canaille.core.models import Group
 from canaille.core.models import User
 from canaille.core.populate import fake_groups
 from canaille.core.populate import fake_users
 from canaille.oidc.basemodels import Token
-from canaille.oidc.installation import generate_keypair
 from flask import Flask
 from flask import g
+from joserfc.jwk import JWKRegistry
 from werkzeug.test import Client
 
 
@@ -55,25 +56,21 @@ class Server:
         )
         self.models = models
         self.logged_user = None
-        self.login_datetime = None
 
         @self.app.before_request
-        def logged_user():
+        def login():
             if self.logged_user:
-                g.user = self.logged_user
-            else:
-                try:
-                    del g.user
-                except AttributeError:
-                    pass
+                now = datetime.datetime.now(datetime.timezone.utc)
+                g.session = SessionObject(
+                    user=self.logged_user, last_login_datetime=now
+                )
 
-            if self.login_datetime:
-                g.last_login_datetime = self.login_datetime
-            else:
-                try:
-                    del g.last_login_datetime
-                except AttributeError:
-                    pass
+        @self.app.after_request
+        def logout(response):
+            if self.logged_user:
+                g.session = None
+
+            return response
 
     def _make_request_handler(self):
         server = self
@@ -144,12 +141,10 @@ class Server:
         This allows to skip the connection screen.
         """
         self.logged_user = user
-        self.login_datetime = datetime.datetime.now(datetime.timezone.utc)
 
     def logout(self):
         """Close the current user session if existing."""
         self.logged_user = None
-        self.login_datetime = None
 
     def consent(self, user: User, client: Client | None = None):
         """Make a user consent to share data with OIDC clients.
@@ -188,13 +183,17 @@ def iam_server_port():
 @pytest.fixture(scope="session")
 def iam_configuration(tmp_path_factory, iam_server_port) -> dict[str, Any]:
     """Fixture for editing the configuration of :meth:`~pytest_iam.iam_server`."""
-    private_key, public_key = generate_keypair()
     os.environ["AUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+    jwk = JWKRegistry.generate_key("RSA", 1024)
+    jwk.ensure_kid()
+
     return {
         "TESTING": True,
         "ENV_FILE": None,
         "SECRET_KEY": str(uuid.uuid4()),
         "WTF_CSRF_ENABLED": False,
+        "PREFERRED_URL_SCHEME": "http",
         "SERVER_NAME": f"localhost:{iam_server_port}",
         "CANAILLE": {
             "ENABLE_REGISTRATION": True,
@@ -222,10 +221,7 @@ def iam_configuration(tmp_path_factory, iam_server_port) -> dict[str, Any]:
         },
         "CANAILLE_OIDC": {
             "DYNAMIC_CLIENT_REGISTRATION_OPEN": True,
-            "JWT": {
-                "PUBLIC_KEY": public_key,
-                "PRIVATE_KEY": private_key,
-            },
+            "ACTIVE_JWKS": [jwk.as_dict()],
         },
     }
 
