@@ -89,7 +89,7 @@ wheels = [
 
 [[package]]
 name = "canaille"
-version = "0.0.75"
+version = "0.0.76"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "blinker" },
@@ -101,9 +101,9 @@ dependencies = [
     { name = "pydantic-settings" },
     { name = "wtforms" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/92/92/cace6f84e462d4e7da294a4ad3913cad1a9ee72ef5fb62958681eee80fc3/canaille-0.0.75.tar.gz", hash = "sha256:116a9edecd9ccb0575bff4df54ecc7bd887f0722b0e78863ce2e9a26f91f9eaa", size = 2191163, upload-time = "2025-06-06T12:46:31.391Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f0/c6/38200148fa218aea0014f7eb2a9048d4e792cead0cc8c5d27a136d901ac7/canaille-0.0.76.tar.gz", hash = "sha256:32cae94bcf25bd87324ce5e40e5cbcc91604bdb1c76add72517b1b4eabff9c02", size = 2191195, upload-time = "2025-06-06T13:56:26.145Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f0/31/a8aba7a6a4eb46021cf1de7a4b3ee8b65a00310e0781de4229fd58c0dd5a/canaille-0.0.75-py3-none-any.whl", hash = "sha256:960c553f5736a81a6f9baaad7572eae9d5cbef1a60d4ea7d8d35b611efe17832", size = 2377168, upload-time = "2025-06-06T12:46:28.449Z" },
+    { url = "https://files.pythonhosted.org/packages/b6/9a/e72a1d305285a22275a9f24e4f1924dbf261e264e95ffb6822addc83786e/canaille-0.0.76-py3-none-any.whl", hash = "sha256:b08c462cb239ba547571d5311885e1de70102a4aa78ceabc4c30e93636be434a", size = 2377210, upload-time = "2025-06-06T13:56:23.943Z" },
 ]
 
 [package.optional-dependencies]
