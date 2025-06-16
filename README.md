@@ -12,7 +12,7 @@ Installation
 ------------
 
 ```console
-uv add pytest-iam --group dev
+uv add pytest-iam
 ```
 
 Usage
