@@ -11,7 +11,7 @@ import portpicker
 import pytest
 from canaille import create_app
 from canaille.app import models
-from canaille.app.session import SessionObject
+from canaille.app.session import UserSession
 from canaille.backends import Backend
 from canaille.core.models import Group
 from canaille.core.models import User
@@ -61,9 +61,7 @@ class Server:
         def login():
             if self.logged_user:
                 now = datetime.datetime.now(datetime.timezone.utc)
-                g.session = SessionObject(
-                    user=self.logged_user, last_login_datetime=now
-                )
+                g.session = UserSession(user=self.logged_user, last_login_datetime=now)
 
         @self.app.after_request
         def logout(response):
