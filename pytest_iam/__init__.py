@@ -194,6 +194,7 @@ def iam_configuration(tmp_path_factory, iam_server_port) -> dict[str, Any]:
         "PREFERRED_URL_SCHEME": "http",
         "SERVER_NAME": f"localhost:{iam_server_port}",
         "CANAILLE": {
+            "DATABASE": "memory",
             "ENABLE_REGISTRATION": True,
             "JAVASCRIPT": False,
             "ACL": {
