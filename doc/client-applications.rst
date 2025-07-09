@@ -13,6 +13,22 @@ pytest-iam will help you set up some of those scenarios in your tests.
 Setting up your test
 --------------------
 
+Start by configuring your application so it uses pytest-iam as identity provider.
+This would probably be something in the fashion of:
+
+.. code:: python
+    :caption: conftest.py
+
+    @pytest.fixture
+    def app(iam_server):
+        return create_app(
+            config={
+                "SERVER_NAME": "myclient.test",
+                "SECRET_KEY": str(uuid.uuid4()),
+                "OAUTH_SERVER": iam_server.url,
+            }
+        )
+
 Users & groups
 ~~~~~~~~~~~~~~
 
