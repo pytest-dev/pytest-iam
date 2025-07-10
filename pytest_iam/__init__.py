@@ -17,11 +17,12 @@ from canaille.core.models import Group
 from canaille.core.models import User
 from canaille.core.populate import fake_groups
 from canaille.core.populate import fake_users
+from canaille.oidc.basemodels import Client
 from canaille.oidc.basemodels import Token
 from flask import Flask
 from flask import g
 from joserfc.jwk import JWKRegistry
-from werkzeug.test import Client
+from werkzeug.test import Client as TestClient
 
 
 class Server:
@@ -33,7 +34,7 @@ class Server:
     app: Flask
     """The authorization server flask app."""
 
-    test_client: Client
+    test_client: TestClient
     """A test client to interact with the IAM without performing real network requests."""
 
     models: ModuleType
