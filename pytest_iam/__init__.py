@@ -93,8 +93,8 @@ class Server:
         """
         with self.app.app_context():
             user = fake_users()[0]
-            user.update(**kwargs)
-            user.save()
+            self.backend.update(user, **kwargs)
+            self.backend.save(user)
 
         return user
 
@@ -104,9 +104,10 @@ class Server:
         Any parameter will be used instead of a random value.
         """
         with self.app.app_context():
-            group = fake_groups(nb_users_max=0)[0]
-            group.update(**kwargs)
-            group.save()
+            groups = fake_groups(nb_users_max=0)
+            group = groups[0]
+            self.backend.update(group, **kwargs)
+            self.backend.save(group)
 
         return group
 

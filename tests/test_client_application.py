@@ -190,3 +190,11 @@ def test_account_creation(iam_server, client, test_client):
     assert user.user_name == "user"
 
     iam_server.logout()
+
+
+def test_random_user(iam_server):
+    assert isinstance(iam_server.random_user(), iam_server.models.User)
+
+
+def test_random_group(iam_server):
+    assert isinstance(iam_server.random_group(), iam_server.models.Group)

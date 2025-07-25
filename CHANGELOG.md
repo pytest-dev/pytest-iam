@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+## [0.2.4] - Unreleased
+
+### Fixed
+
+- ``fake_users`` and ``fake_groups`` was broken. #5
+
 ## [0.2.3] - 2025-07-09
 
 ### Fixed
