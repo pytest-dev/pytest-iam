@@ -185,7 +185,7 @@ def iam_configuration(tmp_path_factory, iam_server_port) -> dict[str, Any]:
     """Fixture for editing the configuration of :meth:`~pytest_iam.iam_server`."""
     os.environ["AUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-    jwk = JWKRegistry.generate_key("RSA", 1024)
+    jwk = JWKRegistry.generate_key("RSA", 2048)
     jwk.ensure_kid()
 
     return {
