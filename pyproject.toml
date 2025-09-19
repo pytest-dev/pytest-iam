@@ -112,8 +112,8 @@ commands = [
 ]
 
 [tool.tox.env.minversions]
-runner = "uv-venv-lock-runner"
-with_dev = true
+runner = "uv-venv-runner"
+dependency_groups = ["dev"]
 uv_resolution = "lowest-direct"
 
 [tool.tox.env.doc]
