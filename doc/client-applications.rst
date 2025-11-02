@@ -16,7 +16,7 @@ Setting up your test
 Start by configuring your application so it uses pytest-iam as identity provider.
 This would probably be something in the fashion of:
 
-.. code:: python
+.. code-block:: python
     :caption: conftest.py
 
     @pytest.fixture
@@ -106,8 +106,8 @@ model. Let us suppose your application have a ``/authorize`` endpoint for the au
 
 .. note::
 
-   Clients have a :attr:`~canaille.oidc.basemodels.Client.trusted` parameter.
-   When it is :data:`True`, end-users won't be showed a consent page
+   The IAM server has a :attr:`~canaille.oidc.configuration.OIDCSettings.TRUSTED_HOSTS` parameter.
+   If its value matches the client_uri, end-users won't be showed a consent page
    when the client redirect them to the IAM authorization page.
 
 Note that the IAM implements the `OAuth2/OIDC dynamic client registration protocol <https://datatracker.ietf.org/doc/html/rfc7591>`_,
@@ -283,6 +283,6 @@ Provisioning
 
 The ``iam_server`` instance provides a `SCIM2 provisioning API <https://scim.libre.sh>`_ at the address ``/scim/v2``.
 You can use it to update your user profiles directly at the IAM.
-You can have a look to the :doc:`Canaille documentation <canaille:tutorial/provisioning>` to see implementation details.
+You can have a look to the :doc:`Canaille documentation <canaille:howtos/provisioning>` to see implementation details.
 
 To perform SCIM requests you might be interested in tools such as `scim2-client <https://scim2-cli.readthedocs.io>`_.

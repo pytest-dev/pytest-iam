@@ -41,14 +41,14 @@ wheels = [
 
 [[package]]
 name = "authlib"
-version = "1.6.4"
+version = "1.6.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ce/bb/73a1f1c64ee527877f64122422dafe5b87a846ccf4ac933fe21bcbb8fee8/authlib-1.6.4.tar.gz", hash = "sha256:104b0442a43061dc8bc23b133d1d06a2b0a9c2e3e33f34c4338929e816287649", size = 164046, upload-time = "2025-09-17T09:59:23.897Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/cd/3f/1d3bbd0bf23bdd99276d4def22f29c27a914067b4cf66f753ff9b8bbd0f3/authlib-1.6.5.tar.gz", hash = "sha256:6aaf9c79b7cc96c900f0b284061691c5d4e61221640a948fe690b556a6d6d10b", size = 164553, upload-time = "2025-10-02T13:36:09.489Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0e/aa/91355b5f539caf1b94f0e66ff1e4ee39373b757fce08204981f7829ede51/authlib-1.6.4-py2.py3-none-any.whl", hash = "sha256:39313d2a2caac3ecf6d8f95fbebdfd30ae6ea6ae6a6db794d976405fdd9aa796", size = 243076, upload-time = "2025-09-17T09:59:22.259Z" },
+    { url = "https://files.pythonhosted.org/packages/f8/aa/5082412d1ee302e9e7d80b6949bc4d2a8fa1149aaab610c5fc24709605d6/authlib-1.6.5-py2.py3-none-any.whl", hash = "sha256:3e0e0507807f842b02175507bdee8957a1d5707fd4afb17c32fb43fee90b6e3a", size = 243608, upload-time = "2025-10-02T13:36:07.637Z" },
 ]
 
 [[package]]
@@ -89,21 +89,25 @@ wheels = [
 
 [[package]]
 name = "canaille"
-version = "0.0.84"
+version = "0.0.87"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "blinker" },
     { name = "click" },
+    { name = "dramatiq" },
+    { name = "dramatiq-eager-broker" },
     { name = "flask" },
     { name = "flask-caching" },
+    { name = "flask-dramatiq" },
     { name = "flask-wtf" },
     { name = "httpx" },
+    { name = "pika" },
     { name = "pydantic-settings" },
     { name = "wtforms" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/01/a1/dfdb22563b208c50033f38c10bc82fbf3d1fb96f907374e62cccaf4241e0/canaille-0.0.84.tar.gz", hash = "sha256:e3808b4e0f54049be552149d56142aaa0334c17005eb20e38b21c7cf0345bb68", size = 2251440, upload-time = "2025-09-19T14:15:02.219Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3c/49/16efa6bdb36b5b9dea9cde1db7f852d1dd462443c3cfef889c10836ad5d0/canaille-0.0.87.tar.gz", hash = "sha256:0f5e2e955e4f1237ace30c5df1d76506e9fefd96fac0155d4ee1b1f7b51dcb37", size = 5316499, upload-time = "2025-11-02T11:44:14.558Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6f/d8/a5076dd103e090b56db66134a9ee6deaa7e5062683623b293f441f5445cf/canaille-0.0.84-py3-none-any.whl", hash = "sha256:7b8191cdc6350c2be684ec5fc60584567b97328e7316034b57decc1d1f48a10f", size = 2449462, upload-time = "2025-09-19T14:14:45.105Z" },
+    { url = "https://files.pythonhosted.org/packages/91/a0/b249b1a7f4956c3e5b30ea0cb1fc7f442a8da921e0c1ebafafbcda4cfb86/canaille-0.0.87-py3-none-any.whl", hash = "sha256:7c2d640dd25c89432c1a4a53eedbf4b61baa360ac62da266b322f1fe95837d1a", size = 5579181, upload-time = "2025-11-02T11:44:09.256Z" },
 ]
 
 [package.optional-dependencies]
@@ -471,11 +475,35 @@ wheels = [
 ]
 
 [[package]]
+name = "dramatiq"
+version = "1.18.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "prometheus-client" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d9/9f/c8be928a88c387ed27344de089278e76d893dc71ad9e4b2a39a61deab0d8/dramatiq-1.18.0.tar.gz", hash = "sha256:5ea436b6e50dae64d4de04f1eb519ad239a6b1ba6315ba1dce1c0c4c1ebedfaf", size = 100868, upload-time = "2025-05-30T12:00:31.913Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ac/00/d9ea755cdeda3d498504775b62122b72ba282b91446fd58980171fb1084c/dramatiq-1.18.0-py3-none-any.whl", hash = "sha256:d360f608aa3cd06f5db714bfcd23825dc7098bacfee52aca536b0bb0faae3c69", size = 121231, upload-time = "2025-05-30T12:00:30.199Z" },
+]
+
+[[package]]
+name = "dramatiq-eager-broker"
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dramatiq" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/91/82/eab853b2822803ff9b5b7b17ab8737524c8ed888b9070612cc4ebd821f86/dramatiq_eager_broker-0.3.0.tar.gz", hash = "sha256:c5f1491195df2299251275c1390f1c33fac26ba8aff9feec5496555441df9a02", size = 2891, upload-time = "2025-10-29T16:46:01.462Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1e/9c/bdfdeae6c63dfbdf6688784471ac3ecf7a6071d7e0600d4856a81f4e01f9/dramatiq_eager_broker-0.3.0-py3-none-any.whl", hash = "sha256:332cfee6d6b598ad322b0e768eb05a97c591e8c365a0d275ce64fad2bdfb4402", size = 3147, upload-time = "2025-10-29T16:46:00.677Z" },
+]
+
+[[package]]
 name = "exceptiongroup"
 version = "1.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/0b/9f/a65090624ecf468cdca03533906e7c69ed7588582240cfe7cc9e770b50eb/exceptiongroup-1.3.0.tar.gz", hash = "sha256:b241f5885f560bc56a59ee63ca4c6a8bfa46ae4ad651af316d4e81817bb9fd88", size = 29749, upload-time = "2025-05-10T17:42:51.123Z" }
 wheels = [
@@ -531,6 +559,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e2/80/74846c8af58ed60972d64f23a6cd0c3ac0175677d7555dff9f51bf82c294/flask_caching-2.3.1.tar.gz", hash = "sha256:65d7fd1b4eebf810f844de7de6258254b3248296ee429bdcb3f741bcbf7b98c9", size = 67560, upload-time = "2025-02-23T01:34:40.207Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/00/bb/82daa5e2fcecafadcc8659ce5779679d0641666f9252a4d5a2ae987b0506/Flask_Caching-2.3.1-py3-none-any.whl", hash = "sha256:d3efcf600e5925ea5a2fcb810f13b341ae984f5b52c00e9d9070392f3ca10761", size = 28916, upload-time = "2025-02-23T01:34:37.749Z" },
+]
+
+[[package]]
+name = "flask-dramatiq"
+version = "0.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dramatiq" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e8/b0/c03d2184693ddf6a9f8e8b79d72670446f38758f6c067082b86a50bda8bd/flask-dramatiq-0.6.0.tar.gz", hash = "sha256:63709e73d7c8d2e5d9bc554d1e859d91c5c5c9a4ebc9461752655bf1e0b87420", size = 5672, upload-time = "2019-11-06T11:14:42.291Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/49/52/496d15ad26f3586fb3addfd71cea493115a5de528ec4eae6ed44b2c0577c/flask_dramatiq-0.6.0-py3-none-any.whl", hash = "sha256:7d4a9289721577f726183f7c44c6713a16bbdff54b946f27abc2ffcc65768adf", size = 5902, upload-time = "2019-11-06T11:14:43.802Z" },
 ]
 
 [[package]]
@@ -634,14 +674,14 @@ wheels = [
 
 [[package]]
 name = "joserfc"
-version = "1.3.3"
+version = "1.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b0/67/c38debd7b24dc734c11d56e1aae38dd5839df697cb64b9c10cf35d74db40/joserfc-1.3.3.tar.gz", hash = "sha256:f9a80eb9f179a6c594d48cb2c29c5147d308dd7d8e353da2a14b57e16c7178f5", size = 196526, upload-time = "2025-09-15T07:25:42.942Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/26/a0/4b8dfecc8ec3c15aa1f2ff7d5b947344378b5b595ce37c8a8fe6e25c1400/joserfc-1.4.0.tar.gz", hash = "sha256:e8c2f327bf10a937d284d57e9f8aec385381e5e5850469b50a7dade1aba59759", size = 196339, upload-time = "2025-10-09T07:47:00.835Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4b/0c/7cbe4d00a2a92beb8494686af7c86acbc238810b649e45d460817feaff9c/joserfc-1.3.3-py3-none-any.whl", hash = "sha256:3ff23bf4dd8564b07d4844078cc376064687c6991ebcdcb7822bb90c0f2eb073", size = 74606, upload-time = "2025-09-15T07:25:41.257Z" },
+    { url = "https://files.pythonhosted.org/packages/55/05/342459b7629c6fcb5f99a646886ee2904491955b8cce6b26b0b9a498f67c/joserfc-1.4.0-py3-none-any.whl", hash = "sha256:46917e6b53f1ec0c7e20d34d6f3e6c27da0fa43d0d4ebfb89aada7c86582933a", size = 66390, upload-time = "2025-10-09T07:46:59.591Z" },
 ]
 
 [[package]]
@@ -763,6 +803,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pika"
+version = "1.3.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/db/db/d4102f356af18f316c67f2cead8ece307f731dd63140e2c71f170ddacf9b/pika-1.3.2.tar.gz", hash = "sha256:b2a327ddddf8570b4965b3576ac77091b850262d34ce8c1d8cb4e4146aa4145f", size = 145029, upload-time = "2023-05-05T14:25:43.368Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f9/f3/f412836ec714d36f0f4ab581b84c491e3f42c6b5b97a6c6ed1817f3c16d0/pika-1.3.2-py3-none-any.whl", hash = "sha256:0779a7c1fafd805672796085560d290213a465e4f6f76a6fb19e378d8041a14f", size = 155415, upload-time = "2023-05-05T14:25:41.484Z" },
+]
+
+[[package]]
 name = "platformdirs"
 version = "4.4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -816,6 +865,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/a2/1c/5a401e3c8db696f24bfa599022c743797af7a26bb1d5a8f79c5b0270afab/prek-0.2.1-py3-none-win32.whl", hash = "sha256:fbe488b478b47d9a7134d145b6564b90bfa1a1f7fec6bc7d7945aaa9a85f80cb", size = 4168471, upload-time = "2025-09-15T15:14:17.315Z" },
     { url = "https://files.pythonhosted.org/packages/1d/70/cf844f271171e629dc29a496130317333867c6bcc02cc357eb80969ab328/prek-0.2.1-py3-none-win_amd64.whl", hash = "sha256:f066681ffb0f4de4c3a74dfb56cf417751ee2df2c38e2ed6af78d5e15262aa5d", size = 4719355, upload-time = "2025-09-15T15:14:18.784Z" },
     { url = "https://files.pythonhosted.org/packages/20/63/1625310edb28937719eedfffcbd6e4728dd4d27f777a3f72fdf8c445976b/prek-0.2.1-py3-none-win_arm64.whl", hash = "sha256:97c8367e226930600dfad28405f091a0bc88cc601bfa66ace42ce1cd38e3ee92", size = 4414447, upload-time = "2025-09-15T15:14:20.43Z" },
+]
+
+[[package]]
+name = "prometheus-client"
+version = "0.23.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/23/53/3edb5d68ecf6b38fcbcc1ad28391117d2a322d9a1a3eff04bfdb184d8c3b/prometheus_client-0.23.1.tar.gz", hash = "sha256:6ae8f9081eaaaf153a2e959d2e6c4f4fb57b12ef76c8c7980202f1e57b48b2ce", size = 80481, upload-time = "2025-09-18T20:47:25.043Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b8/db/14bafcb4af2139e046d03fd00dea7873e48eafe18b7d2797e73d6681f210/prometheus_client-0.23.1-py3-none-any.whl", hash = "sha256:dd1913e6e76b59cfe44e7a4b83e01afc9873c1bdfd2ed8739f1e76aeca115f99", size = 61145, upload-time = "2025-09-18T20:47:23.875Z" },
 ]
 
 [[package]]
@@ -1042,7 +1100,7 @@ doc = [
 
 [package.metadata]
 requires-dist = [
-    { name = "canaille", extras = ["oidc"], specifier = ">=0.0.78" },
+    { name = "canaille", extras = ["oidc"], specifier = ">=0.0.87" },
     { name = "faker", specifier = ">=21.0.0" },
     { name = "portpicker", specifier = ">=1.6.0" },
     { name = "pytest", specifier = ">=7.0.0" },
