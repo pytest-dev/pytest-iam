@@ -34,7 +34,7 @@ dependencies = [
     "canaille[oidc]>=0.0.87",
     "portpicker>=1.6.0",
     "pytest>=7.0.0",
-    "faker>=21.0.0",
+    "faker>=38.0.0",
 ]
 
 [dependency-groups]
@@ -113,6 +113,7 @@ commands = [
 ]
 
 [tool.tox.env.minversions]
+base_python = ["python3.10"]
 runner = "uv-venv-runner"
 dependency_groups = ["dev"]
 uv_resolution = "lowest-direct"
