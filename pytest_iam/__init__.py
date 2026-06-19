@@ -222,7 +222,7 @@ def iam_configuration(tmp_path_factory, iam_server_port) -> dict[str, Any]:
         },
         "CANAILLE_OIDC": {
             "DYNAMIC_CLIENT_REGISTRATION_OPEN": True,
-            "ACTIVE_JWKS": [jwk.as_dict()],
+            "ACTIVE_JWKS": [jwk.as_dict(private=True)],
         },
     }
 
