@@ -2,7 +2,7 @@ Configuration
 #############
 
 pytest-iam can be configured by redefining or expanding the :meth:`~pytest_iam.iam_configuration` fixture.
-This returns a :const:`dict` containing the canaille :doc:`canaille:configuration`.
+This returns a :const:`dict` containing the canaille :doc:`canaille:references/configuration`.
 
 .. code-block:: python
 

@@ -31,10 +31,13 @@ documentation = "https://pytest-iam.readthedocs.io/en/latest/"
 
 requires-python = ">=3.10"
 dependencies = [
-    "canaille[oidc]>=0.0.87",
+    "canaille[oidc]>=0.3.0",
     "portpicker>=1.6.0",
     "pytest>=7.0.0",
-    "faker>=38.0.0",
+    "faker>=38.2.0",
+    # canaille >=0.3 requires a wtforms prerelease; declaring it explicitly
+    # opts uv into the prerelease so canaille can be resolved.
+    "wtforms>=3.3.0b2",
 ]
 
 [dependency-groups]
