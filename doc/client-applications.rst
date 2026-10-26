@@ -43,7 +43,7 @@ IAM server for your tests. Optionally you can put them in pytest fixtures so the
         user = iam_server.models.User(
             user_name="user",
             emails=["email@example.org"],
-            password="password",
+            password="correct horse battery staple",
         )
         iam_server.backend.save(user)
         yield user
@@ -66,7 +66,6 @@ If you don't care about the data your users and group, you can use the available
     @pytest.fixture
     def user(iam_server):
         user = iam_server.random_user()
-        iam_server.backend.save(user)
         yield user
         iam_server.backend.delete(user)
 
@@ -106,9 +105,9 @@ model. Let us suppose your application have a ``/authorize`` endpoint for the au
 
 .. note::
 
-   The IAM server has a :attr:`~canaille.oidc.configuration.OIDCSettings.TRUSTED_HOSTS` parameter.
-   If its value matches the client_uri, end-users won't be showed a consent page
-   when the client redirect them to the IAM authorization page.
+   The IAM server does not show the consent page to :attr:`trusted <canaille.oidc.basemodels.Client.trusted>` clients.
+   A client is trusted when its ``client_uri`` domain matches the ``CANAILLE_OIDC.TRUSTED_DOMAINS`` setting.
+   By default, ``.localhost`` and ``127.0.0.1`` are trusted.
 
 Note that the IAM implements the `OAuth2/OIDC dynamic client registration protocol <https://datatracker.ietf.org/doc/html/rfc7591>`_,
 thus you might not need a client fixture if your application dynamically register one. No *initial token* is needed to use dynamic
@@ -138,7 +137,7 @@ Let us suppose that your application have a ``/protected`` endpoint that redirec
 to the IAM server if unauthenticated.
 We suppose that you have a `test_client` fixture like werkzeug :class:`~werkzeug.test.Client`
 that allows to test your application endpoints without real HTTP requests.
-pytest-iam provides its own test client, available with :meth:`~pytest_iam.Server.test_client`.
+pytest-iam provides its own test client, available with :attr:`~pytest_iam.Server.test_client`.
 Let us see how to implement an authorization_code authentication test case:
 
 .. code-block:: python
@@ -285,4 +284,4 @@ The ``iam_server`` instance provides a `SCIM2 provisioning API <https://scim.lib
 You can use it to update your user profiles directly at the IAM.
 You can have a look to the :doc:`Canaille documentation <canaille:howtos/provisioning>` to see implementation details.
 
-To perform SCIM requests you might be interested in tools such as `scim2-client <https://scim2-cli.readthedocs.io>`_.
+To perform SCIM requests you might be interested in tools such as `scim2-client <https://scim2-client.readthedocs.io>`_.

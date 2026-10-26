@@ -12,13 +12,13 @@ Installation
 ------------
 
 ```console
-uv add pytest-iam
+uv add --dev pytest-iam
 ```
 
 Usage
 -----
 
-pytest-iam provides tools to test your application authentication mechanism against a OAuth2/OIDC server, with SCIM support:
+pytest-iam provides tools to test your application authentication mechanism against an OAuth2/OIDC server, with SCIM support:
 
 - It launches a [Canaille](https://canaille.readthedocs.io) instance on a random port;
 - It provides a ``iam_server`` fixture that comes with several features:
@@ -29,10 +29,12 @@ pytest-iam provides tools to test your application authentication mechanism agai
     - utilities to generate random users and groups
 
 To run a full authentication process for a client application in your test,
-you can write something like this:
+you can write something like this.
+The `client` fixture registers your application on the IAM server,
+as described in [the client application guide](https://pytest-iam.readthedocs.io/en/latest/client-applications.html#oidc-client-registration).
 
 ```python
-def test_authentication(iam_server, test_client):
+def test_authentication(iam_server, client, test_client):
     # create a random user on the IAM server
     user = iam_server.random_user()
 

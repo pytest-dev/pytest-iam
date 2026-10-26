@@ -161,7 +161,7 @@ class Server:
     ) -> Consent | list[Consent] | None:
         """Make a user consent to share data with OIDC clients.
 
-        :param client: If :const:`None`, all existing clients are consented.
+        :param client: If :data:`None`, all existing clients are consented.
         """
         with self.app.app_context():
             clients = [client] if client else self.backend.query(models.Client)
