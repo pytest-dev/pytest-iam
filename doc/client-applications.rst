@@ -201,6 +201,8 @@ They allow you to skip the login, password and consent pages:
         # 4. now you have access to the protected page
         res = test_client.get("/protected")
 
+The user is logged out at the end of the test.
+
 Authentication workflow errors
 ------------------------------
 

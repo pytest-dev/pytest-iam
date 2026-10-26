@@ -149,6 +149,8 @@ class Server:
         """Open a session for the user in the IAM session.
 
         This allows to skip the connection screen.
+        The session is closed at the end of the test.
+        A session opened by a module or session scoped fixture stays open.
         """
         self.logged_user = user
 
@@ -262,3 +264,16 @@ def iam_server(
     finally:
         server.httpd.shutdown()
         server_thread.join()
+
+
+@pytest.fixture(autouse=True)
+def iam_restore_login(request: pytest.FixtureRequest) -> Iterator[None]:
+    """Undo the :meth:`~pytest_iam.Server.login` calls made during each test."""
+    if "iam_server" not in request.fixturenames:
+        yield
+        return
+
+    server = request.getfixturevalue("iam_server")
+    logged_user = server.logged_user
+    yield
+    server.logged_user = logged_user
