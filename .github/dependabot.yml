@@ -1,0 +1,36 @@
+version: 2
+updates:
+  - package-ecosystem: uv
+    directory: /
+    # Only refresh uv.lock: the lower bounds in pyproject.toml are tested by the minversions job.
+    versioning-strategy: lockfile-only
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      uv:
+        patterns:
+          - "*"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: pre-commit
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      pre-commit:
+        patterns:
+          - "*"
