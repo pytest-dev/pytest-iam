@@ -12,6 +12,11 @@ Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<pa
 ### Added
 
 - Type annotations and a ``py.typed`` marker.
+- Support for Python 3.15.
+
+### Removed
+
+- Support for Python 3.10.
 
 ### Fixed
 

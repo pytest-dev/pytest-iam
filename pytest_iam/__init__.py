@@ -71,7 +71,7 @@ class Server:
         @self.app.before_request
         def login() -> None:
             if self.logged_user:
-                now = datetime.datetime.now(datetime.timezone.utc)
+                now = datetime.datetime.now(datetime.UTC)
                 g.session = UserSession(user=self.logged_user, last_login_datetime=now)
 
         @self.app.after_request
@@ -136,7 +136,7 @@ class Server:
                 type="access_token",
                 refresh_token=str(uuid.uuid4()),
                 scope=client.scope,
-                issue_date=datetime.datetime.now(datetime.timezone.utc),
+                issue_date=datetime.datetime.now(datetime.UTC),
                 lifetime=3600,
                 audience=[client],
             )
@@ -172,7 +172,7 @@ class Server:
                     client=client,
                     subject=user,
                     scope=client.scope,
-                    issue_date=datetime.datetime.now(datetime.timezone.utc),
+                    issue_date=datetime.datetime.now(datetime.UTC),
                 )
                 for client in clients
             ]

@@ -14,11 +14,11 @@ keywords = ["oidc", "oauth", "oauth2", "openid", "identity", "pytest", "unit tes
 classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 4 - Beta",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Programming Language :: Python :: Implementation :: CPython",
     "Environment :: Web Environment",
     "Programming Language :: Python",
@@ -26,7 +26,7 @@ classifiers = [
     "Framework :: Pytest",
     "Typing :: Typed",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "canaille[oidc]>=0.3.0",
     "portpicker>=1.6.0",
@@ -111,11 +111,11 @@ env_list = [
     "doc",
     "style",
     "typing",
-    "py310",
     "py311",
     "py312",
     "py313",
     "py314",
+    "py315",
     "minversions",
 ]
 
@@ -138,7 +138,7 @@ commands = [
 ]
 
 [tool.tox.env.minversions]
-base_python = ["python3.10"]
+base_python = ["python3.11"]
 runner = "uv-venv-runner"
 dependency_groups = ["dev"]
 uv_resolution = "lowest-direct"
