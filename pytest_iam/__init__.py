@@ -206,6 +206,7 @@ def iam_configuration(tmp_path_factory, iam_server_port) -> dict[str, Any]:
             },
             "LOGGING": {
                 "version": 1,
+                "disable_existing_loggers": False,
                 "formatters": {
                     "default": {
                         "format": "[%(asctime)s] %(levelname)s in %(module)s: %(message)s",
@@ -217,7 +218,9 @@ def iam_configuration(tmp_path_factory, iam_server_port) -> dict[str, Any]:
                         "formatter": "default",
                     }
                 },
-                "root": {"level": "DEBUG", "handlers": ["canaille"]},
+                "loggers": {
+                    "canaille": {"level": "DEBUG", "handlers": ["canaille"]},
+                },
             },
         },
         "CANAILLE_OIDC": {

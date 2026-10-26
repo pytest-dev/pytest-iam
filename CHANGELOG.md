@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<patch>).
 
+## [Unreleased]
+
+### Fixed
+
+- Starting ``iam_server`` no longer disables the loggers of the tested project, nor changes the root logger configuration.
+
 ## [0.2.6] - 2026-06-20
 
 ### Fixed
