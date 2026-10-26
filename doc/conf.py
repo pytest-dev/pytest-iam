@@ -38,6 +38,7 @@ intersphinx_mapping = {
     "flask": ("https://flask.palletsprojects.com/en/latest/", None),
     "werkzeug": ("https://werkzeug.palletsprojects.com/en/latest/", None),
     "authlib": ("https://docs.authlib.org/en/latest/", None),
+    "pytest": ("https://docs.pytest.org/en/stable/", None),
 }
 
 issues_github_path = "pytest-dev/pytest-iam"
