@@ -9,6 +9,7 @@ Table of contents
    :maxdepth: 2
 
    client-applications
+   signed-authorization-requests
    resource-servers
    how-it-works
    configuration
