@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 import datetime
-import os
-import sys
 from importlib import metadata
-
-sys.path.insert(0, os.path.abspath(".."))
-sys.path.insert(0, os.path.abspath("../pytest_iam"))
 
 # -- General configuration ------------------------------------------------
 
@@ -45,9 +40,7 @@ intersphinx_mapping = {
     "authlib": ("https://docs.authlib.org/en/latest/", None),
 }
 
-issues_uri = "https://github.com/pytest-dev/pytest_iam/-/issues/{issue}"
-issues_pr_uri = "https://github.com/pytest-dev/pytest_iam/-/merge_requests/{pr}"
-issues_commit_uri = "https://github.com/pytest-dev/pytest_iam/-/commit/{commit}"
+issues_github_path = "pytest-dev/pytest-iam"
 
 # -- Options for HTML output ----------------------------------------------
 

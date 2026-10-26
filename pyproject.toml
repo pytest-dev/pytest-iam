@@ -64,12 +64,11 @@ doc = [
 iam = "pytest_iam"
 
 [tool.uv.build-backend]
-module-root = ""
 source-include = ["tests/**", "CHANGELOG.md"]
 
 [tool.mypy]
 strict = true
-files = ["pytest_iam"]
+files = ["src/pytest_iam"]
 
 [[tool.mypy.overrides]]
 module = ["canaille", "canaille.*"]
