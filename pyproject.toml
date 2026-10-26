@@ -9,27 +9,22 @@ description = "A fully functional OAUTH2 / OpenID Connect (OIDC) / SCIM server t
 authors = [{name="Yaal Coop", email="contact@yaal.coop"}]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "pytest_iam"}]
 keywords = ["oidc", "oauth", "oauth2", "openid", "identity", "pytest", "unit tests", "iam", "scim"]
 classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 4 - Beta",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
-    "License :: OSI Approved :: MIT License",
     "Environment :: Web Environment",
     "Programming Language :: Python",
     "Operating System :: OS Independent",
     "Framework :: Pytest",
     "Typing :: Typed",
 ]
-
-repository = "https://github.com/pytest-dev/pytest-iam"
-documentation = "https://pytest-iam.readthedocs.io/en/latest/"
-
 requires-python = ">=3.10"
 dependencies = [
     "canaille[oidc]>=0.3.0",
@@ -40,6 +35,11 @@ dependencies = [
     # opts uv into the prerelease so canaille can be resolved.
     "wtforms>=3.3.0b2",
 ]
+
+[project.urls]
+repository = "https://github.com/pytest-dev/pytest-iam"
+documentation = "https://pytest-iam.readthedocs.io/en/latest/"
+changelog = "https://github.com/pytest-dev/pytest-iam/blob/main/CHANGELOG.md"
 
 [dependency-groups]
 dev = [
