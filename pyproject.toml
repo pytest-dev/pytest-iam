@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv_build>=0.13.5,<0.14"]
+build-backend = "uv_build"
 
 [project]
 name = "pytest-iam"
@@ -8,6 +8,7 @@ version = "0.2.6"
 description = "A fully functional OAUTH2 / OpenID Connect (OIDC) / SCIM server to be used in your testsuite"
 authors = [{name="Yaal Coop", email="contact@yaal.coop"}]
 license = "MIT"
+license-files = ["LICENSE.md"]
 readme = "README.md"
 keywords = ["oidc", "oauth", "oauth2", "openid", "identity", "pytest", "unit tests", "iam", "scim"]
 classifiers = [
@@ -61,6 +62,10 @@ doc = [
 
 [project.entry-points."pytest11"]
 iam = "pytest_iam"
+
+[tool.uv.build-backend]
+module-root = ""
+source-include = ["tests/**", "CHANGELOG.md"]
 
 [tool.mypy]
 strict = true
