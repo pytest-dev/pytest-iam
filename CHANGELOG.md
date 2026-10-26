@@ -9,6 +9,10 @@ Versions follow [Semantic Versioning](https://semver.org/>) (<major>.<minor>.<pa
 
 ## [Unreleased]
 
+### Added
+
+- Type annotations and a ``py.typed`` marker.
+
 ### Fixed
 
 - Starting ``iam_server`` no longer disables the loggers of the tested project, nor changes the root logger configuration.
