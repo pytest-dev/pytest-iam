@@ -50,3 +50,13 @@ def test_valid_token_auth(iam_server, test_client, client, user):
 def test_invalid_token_auth(iam_server, test_client):
     res = test_client.get("/resource", headers={"Authorization": "Bearer invalid"})
     assert res.status_code == 401
+
+
+def test_client_token_auth(iam_server, test_client, client):
+    token = iam_server.random_token(subject=None, client=client)
+    assert token.subject is None
+
+    res = test_client.get(
+        "/resource", headers={"Authorization": f"Bearer {token.access_token}"}
+    )
+    assert res.status_code == 200

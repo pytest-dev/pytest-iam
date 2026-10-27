@@ -121,9 +121,12 @@ class Server:
 
         return group
 
-    def random_token(self, subject: User, client: Client, **kwargs: Any) -> Token:
+    def random_token(
+        self, subject: User | None, client: Client, **kwargs: Any
+    ) -> Token:
         """Generate a test :class:`~canaille.oidc.basemodels.Token` with random values.
 
+        With a :data:`None` subject, the token belongs to the client only.
         Any parameter will be used instead of a random value.
         """
         with self.app.app_context():

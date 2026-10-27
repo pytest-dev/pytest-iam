@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- ``Server.random_token`` accepts ``subject=None``, to create a token that belongs to a client only.
+
 ### Changed
 
 - A user logged in with ``Server.login`` during a test is logged out at the end of the test.
