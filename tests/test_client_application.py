@@ -12,27 +12,6 @@ def test_server_configuration(iam_server):
     assert res.json["issuer"] in iam_server.url
 
 
-def test_client_dynamic_registration(iam_server):
-    response = iam_server.test_client.post(
-        "/oauth/register",
-        json={
-            "client_name": "Nubla Dashboard",
-            "client_uri": "http://client.test",
-            "redirect_uris": ["http://client.test/authorize"],
-            "grant_types": ["authorization_code"],
-            "response_types": ["code", "token", "id_token"],
-            "token_endpoint_auth_method": "client_secret_basic",
-            "scope": "openid profile groups",
-        },
-    )
-    client_id = response.json["client_id"]
-    client_secret = response.json["client_secret"]
-
-    client = iam_server.backend.get(iam_server.models.Client, client_id=client_id)
-    assert client.client_secret == client_secret
-    iam_server.backend.delete(client)
-
-
 def test_logs(iam_server, caplog):
     response = iam_server.test_client.post(
         "/oauth/register",

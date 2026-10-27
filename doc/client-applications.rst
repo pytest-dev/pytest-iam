@@ -36,46 +36,17 @@ You can use the available :class:`~canaille.core.models.User` and :class:`~canai
 IAM server for your tests. Optionally you can put them in pytest fixtures so they are reusable:
 
 
-.. code:: python
-
-    @pytest.fixture
-    def user(iam_server):
-        user = iam_server.models.User(
-            user_name="user",
-            emails=["email@example.org"],
-            password="correct horse battery staple",
-        )
-        iam_server.backend.save(user)
-        yield user
-        iam_server.backend.delete(user)
-
-    @pytest.fixture
-    def group(iam_server, user):
-        group = iam_server.models.Group(
-            display_name="group",
-            members=[user],
-        )
-        iam_server.backend.save(group)
-        yield group
-        iam_server.backend.delete(group)
+.. literalinclude:: examples/test_users_and_groups.py
+    :language: python
+    :start-at: @pytest.fixture
+    :end-at: iam_server.backend.delete(group)
 
 If you don't care about the data your users and group, you can use the available random generation utilities.
 
-.. code:: python
-
-    @pytest.fixture
-    def user(iam_server):
-        user = iam_server.random_user()
-        yield user
-        iam_server.backend.delete(user)
-
-    @pytest.fixture
-    def group(iam_server, user):
-        group = iam_server.random_group()
-        group.members = group.members + [user]
-        iam_server.backend.save(group)
-        yield group
-        iam_server.backend.delete(group)
+.. literalinclude:: examples/test_random_users_and_groups.py
+    :language: python
+    :start-at: @pytest.fixture
+    :end-at: iam_server.backend.delete(group)
 
 OIDC Client registration
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,24 +55,9 @@ Before your application can authenticate against the IAM server, it must registe
 such as the allowed redirection URIs. To achieve this you can use the :class:`~canaille.oidc.basemodels.Client`
 model. Let us suppose your application have a ``/authorize`` endpoint for the authorization code - token exchange:
 
-.. code:: python
-
-    @pytest.fixture
-    def client(iam_server):
-        inst = iam_server.models.Client(
-            client_id="client_id",
-            client_secret="client_secret",
-            client_name="My Application",
-            client_uri="http://example.org",
-            redirect_uris=["http://example.org/authorize"],
-            grant_types=["authorization_code"],
-            response_types=["code", "token", "id_token"],
-            token_endpoint_auth_method="client_secret_basic",
-            scope=["openid", "profile", "groups"],
-        )
-        iam_server.backend.save(inst)
-        yield inst
-        iam_server.backend.delete(inst)
+.. literalinclude:: examples/test_client_registration.py
+    :language: python
+    :pyobject: client
 
 .. note::
 
@@ -113,22 +69,9 @@ Note that the IAM implements the `OAuth2/OIDC dynamic client registration protoc
 thus you might not need a client fixture if your application dynamically register one. No *initial token* is needed to use dynamic
 client registration. Here is an example of dynamic registration you can implement in your application:
 
-.. code:: python
-
-    response = iam_server.test_client.post(
-        "/oauth/register",
-        json={
-            "client_name": "My application",
-            "client_uri": "http://example.org",
-            "redirect_uris": ["http://example.org/authorize"],
-            "grant_types": ["authorization_code"],
-            "response_types": ["code", "token", "id_token"],
-            "token_endpoint_auth_method": "client_secret_basic",
-            "scope": "openid profile groups",
-        },
-    )
-    client_id = response.json["client_id"]
-    client_secret = response.json["client_secret"]
+.. literalinclude:: examples/test_client_registration.py
+    :language: python
+    :pyobject: test_dynamic_registration
 
 Nominal authentication workflow
 -------------------------------
