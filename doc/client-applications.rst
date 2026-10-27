@@ -1,7 +1,7 @@
 Test a client application
 =========================
 
-This guide shows how to test the login of a client application against the pytest-iam server.
+This guide shows how to test the login of a client application against the IAM server.
 It is meant for developers of an application that logs its users in with OAuth2 or OpenID Connect.
 The examples use the ``user`` and ``client`` fixtures from :doc:`test-data`.
 For applications that sign their authorization requests, see :doc:`signed-authorization-requests`.
@@ -9,7 +9,7 @@ For applications that sign their authorization requests, see :doc:`signed-author
 Configure the application
 -------------------------
 
-The tested application uses :attr:`iam_server.url <pytest_iam.Server.url>` as its identity provider,
+The tested application uses the IAM server at :attr:`iam_server.url <pytest_iam.Server.url>` as its identity provider,
 with the credentials of the ``client`` fixture.
 The examples of this page use a Flask application with an `Authlib <https://authlib.org>`_ client:
 

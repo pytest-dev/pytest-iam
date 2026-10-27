@@ -1,7 +1,7 @@
 Test a resource server
 ======================
 
-This guide shows how to test a resource server that checks access tokens with the pytest-iam server.
+This guide shows how to test a resource server that checks access tokens with the IAM server.
 It is meant for developers of an API that accepts OAuth2 bearer tokens.
 It covers token introspection, as defined by `RFC 7662 <https://datatracker.ietf.org/doc/html/rfc7662>`_.
 The examples use the ``user`` and ``client`` fixtures from :doc:`test-data`.

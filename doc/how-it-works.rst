@@ -77,7 +77,7 @@ environment variables prefixed by ``PYTEST_IAM_``, and a ``.pytest-iam.env`` fil
 The prefix keeps the server away from the ``CANAILLE_*`` variables that the tested project may use for its own needs.
 The ``canaille.toml`` file is read by Canaille itself, and pytest-iam cannot disable it.
 A project that has such a file at its root, or that sets ``CANAILLE_CONFIG``,
-also configures the pytest-iam server with it.
+also configures the IAM server with it.
 
 :func:`~pytest_iam.iam_configuration` also sets the ``AUTHLIB_INSECURE_TRANSPORT`` environment variable,
 so that `Authlib <https://authlib.org>`_ accepts the plain HTTP URLs of the server.

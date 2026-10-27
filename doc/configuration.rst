@@ -1,7 +1,7 @@
 Configuration
 #############
 
-This page lists the settings of the pytest-iam server, and the ways to change them.
+This page lists the settings of the IAM server, and the ways to change them.
 It is meant for developers who need a server behavior that differs from the default one.
 :doc:`how-it-works` explains how these settings are used when the server starts.
 

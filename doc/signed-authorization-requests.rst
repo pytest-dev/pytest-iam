@@ -1,5 +1,5 @@
-Signed authorization requests
-=============================
+Test signed authorization requests
+==================================
 
 This guide shows how to test a client application that sends its authorization requests
 as signed request objects, as defined by `RFC 9101 (JAR) <https://www.rfc-editor.org/rfc/rfc9101>`_.
