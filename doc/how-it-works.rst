@@ -65,19 +65,15 @@ This session only exists in the client that received the cookie.
 Configuration sources
 ---------------------
 
-The server configuration comes from several sources.
-The main ones are, from the highest to the lowest priority:
-
-#. the dictionary returned by :func:`~pytest_iam.iam_configuration`;
-#. a ``canaille.toml`` file in the current directory, or the file in the ``CANAILLE_CONFIG`` environment variable;
-#. the environment variables prefixed by ``PYTEST_IAM_``;
-#. the ``.pytest-iam.env`` file.
+The server configuration comes from several sources:
+the :func:`~pytest_iam.iam_configuration` fixture, a ``canaille.toml`` file,
+environment variables prefixed by ``PYTEST_IAM_``, and a ``.pytest-iam.env`` file.
+:doc:`configuration` lists them by priority.
 
 The prefix keeps the server away from the ``CANAILLE_*`` variables that the tested project may use for its own needs.
 The ``canaille.toml`` file is read by Canaille itself, and pytest-iam cannot disable it.
 A project that has such a file at its root, or that sets ``CANAILLE_CONFIG``,
 also configures the pytest-iam server with it.
-See :doc:`configuration` for examples.
 
 :func:`~pytest_iam.iam_configuration` also sets the ``AUTHLIB_INSECURE_TRANSPORT`` environment variable,
 so that `Authlib <https://authlib.org>`_ accepts the plain HTTP URLs of the server.

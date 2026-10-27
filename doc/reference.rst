@@ -5,6 +5,8 @@ Reference
 
 .. autofunction:: pytest_iam.iam_configuration
 
+.. autofunction:: pytest_iam.iam_server_port
+
 .. autofunction:: pytest_iam.iam_restore_login
 
 .. autoclass:: pytest_iam.Server

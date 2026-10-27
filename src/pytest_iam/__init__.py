@@ -191,6 +191,10 @@ class Server:
 
 @pytest.fixture(scope="session")
 def iam_server_port() -> int:
+    """Fixture for choosing the port of :meth:`~pytest_iam.iam_server`.
+
+    By default, it is a free port.
+    """
     return portpicker.pick_unused_port()
 
 
