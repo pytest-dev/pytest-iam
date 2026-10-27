@@ -41,6 +41,8 @@ intersphinx_mapping = {
     "pytest": ("https://docs.pytest.org/en/stable/", None),
 }
 
+nitpick_ignore = [("py:class", "canaille.backends.Backend")]
+
 issues_github_path = "pytest-dev/pytest-iam"
 
 # -- Options for HTML output ----------------------------------------------
