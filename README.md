@@ -1,12 +1,22 @@
 pytest-iam
 ==========
 
-pytest-iam spawns a lightweight OAuth2 / OpenID Connect (OIDC) server in a thread to be used in your test suite.
-The machinery involves [Canaille](https://canaille.readthedocs.io) and [Authlib](https://authlib.org).
+pytest-iam is a pytest plugin that starts an OAuth2 and OpenID Connect (OIDC) server for the tests of an application.
+The server is a [Canaille](https://canaille.readthedocs.io) instance, built on [Authlib](https://authlib.org).
 
-- [Repository](https://github.com/pytest-dev/pytest-iam)
-- [Package](https://pypi.org/project/pytest-iam)
 - [Documentation](https://pytest-iam.readthedocs.io)
+- [Repository](https://github.com/pytest-dev/pytest-iam)
+- [Issues](https://github.com/pytest-dev/pytest-iam/issues)
+- [Package](https://pypi.org/project/pytest-iam)
+
+Why pytest-iam
+--------------
+
+A mock of the identity provider only gives the answers that the test expects.
+pytest-iam runs a real IAM server instead,
+so the tests go through the real OAuth2 and OIDC flows: redirections, forms, code exchange and token introspection.
+The server runs in a thread of the test process.
+It needs no container, and it only listens on `localhost`.
 
 Installation
 ------------
@@ -18,45 +28,40 @@ uv add --dev pytest-iam
 Usage
 -----
 
-pytest-iam provides tools to test your application authentication mechanism against an OAuth2/OIDC server:
+The `iam_server` fixture gives access to the IAM server:
 
-- It launches a [Canaille](https://canaille.readthedocs.io) instance on a random port;
-- It provides a ``iam_server`` fixture that comes with several features:
-    - the URL of the IAM server to configure your application
-    - IAM models (Users, groups, clients, tokens etc.) to prepare your tests and check the side effects.
-      More details on [the reference](https://pytest-iam.readthedocs.io/en/latest/reference.html)
-    - utilities to log-in users and give their consent to your application
-    - utilities to generate random users and groups
+- its URL, to configure the tested application;
+- its models, such as users, groups, clients and tokens, to prepare the tests and check their effects;
+- shortcuts to log users in and record their consent;
+- helpers to create random users, groups and tokens.
 
-To run a full authentication process for a client application in your test,
-you can write something like this.
-The `client` fixture registers your application on the IAM server,
-as described in [the test data guide](https://pytest-iam.readthedocs.io/en/latest/test-data.html#register-a-client).
+The following test logs a user in on a client application.
+The `client` fixture registers the application on the IAM server, and the `user` fixture creates a user,
+as described in [the test data guide](https://pytest-iam.readthedocs.io/en/latest/test-data.html).
+`test_client` is the test client of the application.
 
 ```python
-def test_authentication(iam_server, client, test_client):
-    # create a random user on the IAM server
-    user = iam_server.random_user()
-
-    # log the user in and make it consent all the clients
+def test_login_shortcuts(iam_server, client, user, test_client):
     iam_server.login(user)
-    iam_server.consent(user)
+    iam_server.consent(user, client)
 
-    # 1. attempt to access a protected page, returns a redirection to the IAM
+    # 1. the protected page redirects to the IAM server
     res = test_client.get("/protected")
 
-    # 2. authorization code request
+    # 2. the IAM server redirects to the application with a code
     res = iam_server.test_client.get(res.location)
 
-    # 3. load your application authorization endpoint
+    # 3. the application exchanges the code for a token
     res = test_client.get(res.location)
 
-    # 4. now you have access to the protected page
-    res = test_client.get("/protected")
-
-    assert "Hello, world!" in res.text
+    # 4. the protected page is now accessible
+    res = test_client.get(res.location)
+    assert res.text == "Hello, user!"
 ```
 
-Check the [client application](https://pytest-iam.readthedocs.io/en/latest/client-applications.html) or
-[resource server](https://pytest-iam.readthedocs.io/en/latest/resource-servers.html) tutorials
-for more usecases.
+The [documentation](https://pytest-iam.readthedocs.io) has guides for client applications, resource servers and signed authorization requests.
+
+License
+-------
+
+pytest-iam is published under the MIT license.
