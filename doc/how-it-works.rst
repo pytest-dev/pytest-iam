@@ -26,6 +26,8 @@ During the whole session, the Canaille application context is active.
 This lets tests read and write models with :attr:`~pytest_iam.Server.backend` directly.
 It also means that :data:`flask.current_app` is the Canaille application in test code,
 unless the tested application pushes its own context.
+pytest-iam still gives each request of :attr:`~pytest_iam.Server.test_client` its own :data:`flask.g`:
+the values that a request stores in :data:`flask.g` are removed when the request ends.
 
 Two ways to reach the server
 ----------------------------
@@ -61,6 +63,8 @@ A session opened by a module or session scoped fixture stays open after the test
 until a call to :meth:`~pytest_iam.Server.logout`.
 A user who logs in through the login form gets a regular session cookie instead.
 This session only exists in the client that received the cookie.
+``iam_restore_login`` restores the cookies of :attr:`~pytest_iam.Server.test_client` when the test ends,
+so a login through the form of this client does not outlive the test either.
 
 Configuration sources
 ---------------------

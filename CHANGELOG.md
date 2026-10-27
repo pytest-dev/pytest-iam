@@ -13,7 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- A user logged in with ``Server.login`` during a test is logged out at the end of the test.
+- A user logged in during a test, with ``Server.login`` or with the login form of ``Server.test_client``, is logged out at the end of the test.
+
+### Fixed
+
+- Requests made with ``Server.test_client`` no longer share ``flask.g``. A user logged in with the login form stayed logged in for all the following requests.
 
 ## [0.3.0] - 2026-10-26
 

@@ -25,6 +25,8 @@ from canaille.oidc.basemodels import Token
 from flask import Flask
 from flask import Response
 from flask import g
+from flask import request
+from flask import request_started
 from joserfc.jwk import JWKRegistry
 from werkzeug.test import Client as TestClient
 
@@ -80,6 +82,17 @@ class Server:
                 g.session = None
 
             return response
+
+        # The application context stays active during the tests,
+        # so requests from the test client share the same g.
+        @request_started.connect_via(self.app, weak=False)
+        def save_globals(sender: Flask, **extra: Any) -> None:
+            request.environ["pytest_iam.globals"] = set(g)
+
+        @self.app.teardown_request
+        def restore_globals(exc: BaseException | None) -> None:
+            for name in set(g) - request.environ.get("pytest_iam.globals", set()):
+                g.pop(name)
 
     def _make_request_handler(self) -> type[WSGIRequestHandler]:
         server = self
@@ -275,12 +288,22 @@ def iam_server(
 
 @pytest.fixture(autouse=True)
 def iam_restore_login(request: pytest.FixtureRequest) -> Iterator[None]:
-    """Undo the :meth:`~pytest_iam.Server.login` calls made during each test."""
+    """Log out the users logged in during each test.
+
+    It undoes the :meth:`~pytest_iam.Server.login` calls,
+    and the logins through the forms of :attr:`~pytest_iam.Server.test_client`.
+    """
     if "iam_server" not in request.fixturenames:
         yield
         return
 
     server = request.getfixturevalue("iam_server")
     logged_user = server.logged_user
+    # Werkzeug has no public API to list the cookies of a test client.
+    cookies = server.test_client._cookies
+    saved_cookies = dict(cookies) if cookies is not None else {}
     yield
     server.logged_user = logged_user
+    if cookies is not None:
+        cookies.clear()
+        cookies.update(saved_cookies)
