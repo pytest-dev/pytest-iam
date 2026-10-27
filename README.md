@@ -1,7 +1,7 @@
 pytest-iam
 ==========
 
-pytest-iam spawns a lightweight OAuth2 / OpenID Server (OIDC) / SCIM in a thread to be used in your test suite.
+pytest-iam spawns a lightweight OAuth2 / OpenID Connect (OIDC) server in a thread to be used in your test suite.
 The machinery involves [Canaille](https://canaille.readthedocs.io) and [Authlib](https://authlib.org).
 
 - [Repository](https://github.com/pytest-dev/pytest-iam)
@@ -18,7 +18,7 @@ uv add --dev pytest-iam
 Usage
 -----
 
-pytest-iam provides tools to test your application authentication mechanism against an OAuth2/OIDC server, with SCIM support:
+pytest-iam provides tools to test your application authentication mechanism against an OAuth2/OIDC server:
 
 - It launches a [Canaille](https://canaille.readthedocs.io) instance on a random port;
 - It provides a ``iam_server`` fixture that comes with several features:
