@@ -31,7 +31,7 @@ pytest-iam provides tools to test your application authentication mechanism agai
 To run a full authentication process for a client application in your test,
 you can write something like this.
 The `client` fixture registers your application on the IAM server,
-as described in [the client application guide](https://pytest-iam.readthedocs.io/en/latest/client-applications.html#oidc-client-registration).
+as described in [the test data guide](https://pytest-iam.readthedocs.io/en/latest/test-data.html#register-a-client).
 
 ```python
 def test_authentication(iam_server, client, test_client):

@@ -50,7 +50,7 @@ This includes the objects created by :meth:`~pytest_iam.Server.random_user`,
 :meth:`~pytest_iam.Server.random_group`, :meth:`~pytest_iam.Server.random_token`
 and :meth:`~pytest_iam.Server.consent`.
 Fixtures that create objects should delete them after the test,
-as the examples of :doc:`client-applications` do with ``iam_server.backend.delete``.
+as the examples of :doc:`test-data` do with ``iam_server.backend.delete``.
 
 The user session opened by :meth:`~pytest_iam.Server.login` is the exception.
 pytest-iam does not store this session in a cookie.

@@ -8,6 +8,7 @@ Table of contents
 .. toctree::
    :maxdepth: 2
 
+   test-data
    client-applications
    signed-authorization-requests
    resource-servers

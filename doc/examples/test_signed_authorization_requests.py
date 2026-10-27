@@ -169,10 +169,3 @@ def test_request_object_with_jwks_uri(iam_server, jwks_uri_client, client_key, u
 
     assert res.status_code == 302
     assert "code" in parse_qs(urlsplit(res.location).query)
-
-
-@pytest.fixture
-def user(iam_server):
-    user = iam_server.random_user()
-    yield user
-    iam_server.backend.delete(user)
