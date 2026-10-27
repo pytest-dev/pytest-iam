@@ -32,31 +32,31 @@ from werkzeug.test import Client as TestClient
 
 
 class Server:
-    """A proxy object that is returned by the pytest fixture."""
+    """The IAM server, returned by the :func:`~pytest_iam.iam_server` fixture."""
 
     port: int
-    """The port on which the local http server listens."""
+    """The port of the HTTP server."""
 
     app: Flask
-    """The authorization server flask app."""
+    """The Flask application of the IAM server."""
 
     test_client: TestClient
-    """A test client to interact with the IAM without performing real network requests."""
+    """A test client that sends requests to the IAM server without network."""
 
     models: ModuleType
-    """The module containing the available model classes."""
+    """The module of the Canaille models, such as ``models.User``."""
 
     backend: Backend
-    """The backend used to manage models."""
+    """The Canaille backend, to save, get and delete models."""
 
     logging: bool = False
-    """Whether the request access log is enabled."""
+    """Whether the HTTP server prints one line per request."""
 
     httpd: WSGIServer
-    """The local http server."""
+    """The HTTP server."""
 
     logged_user: User | None
-    """The user whose session is open, see :meth:`login`."""
+    """The user logged in with :meth:`login`, or :data:`None`."""
 
     def __init__(self, app: Flask, port: int, backend: Backend, logging: bool = False):
         self.app = app
@@ -106,13 +106,13 @@ class Server:
 
     @property
     def url(self) -> str:
-        """The URL at which the IAM server is accessible."""
+        """The URL of the IAM server, ending with a slash."""
         return f"http://localhost:{self.port}/"
 
     def random_user(self, **kwargs: Any) -> User:
-        """Generate a :class:`~canaille.core.models.User` with random values.
+        """Create and save a :class:`~canaille.core.models.User` with random values.
 
-        Any parameter will be used instead of a random value.
+        Keyword arguments set some of the values.
         """
         with self.app.app_context():
             user = fake_users()[0]
@@ -122,9 +122,9 @@ class Server:
         return user
 
     def random_group(self, **kwargs: Any) -> Group:
-        """Generate a :class:`~canaille.core.models.Group` with random values.
+        """Create and save a :class:`~canaille.core.models.Group` with random values.
 
-        Any parameter will be used instead of a random value.
+        Keyword arguments set some of the values.
         """
         with self.app.app_context():
             groups = fake_groups(nb_users_max=0)
@@ -137,10 +137,11 @@ class Server:
     def random_token(
         self, subject: User | None, client: Client, **kwargs: Any
     ) -> Token:
-        """Generate a test :class:`~canaille.oidc.basemodels.Token` with random values.
+        """Create and save an access :class:`~canaille.oidc.basemodels.Token` for a client.
 
         With a :data:`None` subject, the token belongs to the client only.
-        Any parameter will be used instead of a random value.
+        The token has the scopes of the client, and lasts 3600 seconds.
+        Keyword arguments set some of the values.
         """
         with self.app.app_context():
             token = self.models.Token(
@@ -162,24 +163,25 @@ class Server:
         return token
 
     def login(self, user: User) -> None:
-        """Open a session for the user in the IAM session.
+        """Log a user in on the IAM server, without the login form.
 
-        This allows to skip the connection screen.
-        The session is closed at the end of the test.
-        A session opened by a module or session scoped fixture stays open.
+        The user is logged out at the end of the test.
+        A login made by a module or session scoped fixture lasts until :meth:`logout`.
         """
         self.logged_user = user
 
     def logout(self) -> None:
-        """Close the current user session if existing."""
+        """Log out the user logged in with :meth:`login`."""
         self.logged_user = None
 
     def consent(
         self, user: User, client: Client | None = None
     ) -> Consent | list[Consent] | None:
-        """Make a user consent to share data with OIDC clients.
+        """Record the consent of a user for a client.
 
-        :param client: If :data:`None`, all existing clients are consented.
+        With a :data:`None` client, the user consents to all the existing clients.
+        Return the consent, the list of consents when several clients exist,
+        or :data:`None` when no client exists.
         """
         with self.app.app_context():
             clients = [client] if client else self.backend.query(models.Client)
@@ -207,18 +209,19 @@ class Server:
 
 @pytest.fixture(scope="session")
 def iam_server_port() -> int:
-    """Fixture for choosing the port of :meth:`~pytest_iam.iam_server`.
+    """Session fixture that returns the port of the IAM server.
 
-    By default, it is a free port.
+    By default, it is a free port. Redefine it to use a fixed port.
     """
     return portpicker.pick_unused_port()
 
 
 @pytest.fixture(scope="session")
-def iam_configuration(
-    tmp_path_factory: pytest.TempPathFactory, iam_server_port: int
-) -> dict[str, Any]:
-    """Fixture for editing the configuration of :meth:`~pytest_iam.iam_server`."""
+def iam_configuration(iam_server_port: int) -> dict[str, Any]:
+    """Session fixture that returns the settings of the IAM server.
+
+    Redefine it to change the settings, as described in :doc:`configuration`.
+    """
     os.environ["AUTHLIB_INSECURE_TRANSPORT"] = "1"
 
     jwk = JWKRegistry.generate_key("RSA", 2048)
@@ -270,7 +273,7 @@ def iam_configuration(
 def iam_server(
     iam_configuration: dict[str, Any], iam_server_port: int
 ) -> Iterator[Server]:
-    """Fixture that creates a Canaille server listening a random port in a thread."""
+    """Session fixture that starts the IAM server in a thread, and returns a :class:`Server`."""
     app = create_app(
         config=iam_configuration, env_file=".pytest-iam.env", env_prefix="PYTEST_IAM_"
     )
@@ -288,7 +291,7 @@ def iam_server(
 
 @pytest.fixture(autouse=True)
 def iam_restore_login(request: pytest.FixtureRequest) -> Iterator[None]:
-    """Log out the users logged in during each test.
+    """Autouse fixture that logs out the users logged in during each test.
 
     It undoes the :meth:`~pytest_iam.Server.login` calls,
     and the logins through the forms of :attr:`~pytest_iam.Server.test_client`.

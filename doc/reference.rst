@@ -1,29 +1,38 @@
 Reference
 #########
 
-.. autofunction:: pytest_iam.iam_server
+This page lists the fixtures and the classes of pytest-iam.
 
-.. autofunction:: pytest_iam.iam_configuration
+Fixtures
+========
 
-.. autofunction:: pytest_iam.iam_server_port
+.. autofunction:: pytest_iam.iam_server() -> pytest_iam.Server
 
-.. autofunction:: pytest_iam.iam_restore_login
+.. autofunction:: pytest_iam.iam_configuration() -> dict
 
-.. autoclass:: pytest_iam.Server
-    :members:
-    :show-inheritance:
-    :undoc-members:
+.. autofunction:: pytest_iam.iam_server_port() -> int
 
-.. autoclass:: canaille.backends.models.Model
-    :members:
-    :show-inheritance:
-    :undoc-members:
+.. autofunction:: pytest_iam.iam_restore_login()
 
-.. automodule:: canaille.core.models
-    :members:
-    :show-inheritance:
-    :undoc-members:
+Server
+======
 
-.. automodule:: canaille.oidc.basemodels
+.. autoclass:: pytest_iam.Server()
     :members:
     :undoc-members:
+    :member-order: groupwise
+    :exclude-members: httpd
+
+Models
+======
+
+:attr:`Server.models <pytest_iam.Server.models>` gives access to the Canaille models,
+documented in :doc:`canaille:references/models`:
+
+- :class:`~canaille.core.models.User`
+- :class:`~canaille.core.models.Group`
+- :class:`~canaille.core.models.WebAuthnCredential`
+- :class:`~canaille.oidc.basemodels.Client`
+- :class:`~canaille.oidc.basemodels.AuthorizationCode`
+- :class:`~canaille.oidc.basemodels.Token`
+- :class:`~canaille.oidc.basemodels.Consent`
