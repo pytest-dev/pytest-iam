@@ -1,6 +1,8 @@
 import json
+import threading
 from urllib.parse import parse_qs
 from urllib.parse import urlsplit
+from wsgiref.simple_server import make_server
 
 import pytest
 from joserfc import jwt
@@ -100,6 +102,73 @@ def test_request_object_signed_with_another_key(iam_server, client, user):
     )
 
     assert res.status_code == 400
+
+
+@pytest.fixture
+def jwks_url(client_key):
+    jwks = json.dumps(KeySet([client_key]).as_dict(private=False)).encode()
+
+    def app(environ, start_response):
+        start_response("200 OK", [("Content-Type", "application/json")])
+        return [jwks]
+
+    httpd = make_server("localhost", 0, app)
+    thread = threading.Thread(target=httpd.serve_forever)
+    thread.start()
+    yield f"http://localhost:{httpd.server_port}/jwks.json"
+    httpd.shutdown()
+    httpd.server_close()
+    thread.join()
+
+
+@pytest.fixture
+def jwks_uri_client(iam_server, jwks_url):
+    client = iam_server.models.Client(
+        client_id="jwks_uri_client_id",
+        client_secret="client_secret",
+        client_name="My Application",
+        client_uri="http://client.test",
+        redirect_uris=["http://client.test/authorize"],
+        grant_types=["authorization_code"],
+        response_types=["code"],
+        token_endpoint_auth_method="client_secret_basic",
+        scope=["openid", "profile"],
+        jwks_uri=jwks_url,
+        require_signed_request_object=True,
+    )
+    iam_server.backend.save(client)
+    yield client
+    iam_server.backend.delete(client)
+
+
+def test_request_object_with_jwks_uri(iam_server, jwks_uri_client, client_key, user):
+    iam_server.login(user)
+    iam_server.consent(user, jwks_uri_client)
+
+    claims = {
+        "iss": jwks_uri_client.client_id,
+        "aud": iam_server.url.rstrip("/"),
+        "client_id": jwks_uri_client.client_id,
+        "response_type": "code",
+        "redirect_uri": "http://client.test/authorize",
+        "scope": "openid profile",
+        "state": "state",
+        "nonce": "nonce",
+    }
+    request_object = jwt.encode(
+        {"alg": "RS256", "kid": client_key.kid}, claims, client_key
+    )
+
+    res = iam_server.test_client.get(
+        "/oauth/authorize",
+        query_string={
+            "client_id": jwks_uri_client.client_id,
+            "request": request_object,
+        },
+    )
+
+    assert res.status_code == 302
+    assert "code" in parse_qs(urlsplit(res.location).query)
 
 
 @pytest.fixture
