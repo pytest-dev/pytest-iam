@@ -70,14 +70,12 @@ Configuration sources
 ---------------------
 
 The server configuration comes from several sources:
-the :func:`~pytest_iam.iam_configuration` fixture, a ``canaille.toml`` file,
+the :func:`~pytest_iam.iam_configuration` fixture,
 environment variables prefixed by ``PYTEST_IAM_``, and a ``.pytest-iam.env`` file.
 :doc:`configuration` lists them by priority.
 
 The prefix keeps the server away from the ``CANAILLE_*`` variables that the tested project may use for its own needs.
-The ``canaille.toml`` file is read by Canaille itself, and pytest-iam cannot disable it.
-A project that has such a file at its root, or that sets ``CANAILLE_CONFIG``,
-also configures the IAM server with it.
+For the same reason, the server does not read the ``canaille.toml`` file, nor the file in ``CANAILLE_CONFIG``.
 
 :func:`~pytest_iam.iam_configuration` also sets the ``AUTHLIB_INSECURE_TRANSPORT`` environment variable,
 so that `Authlib <https://authlib.org>`_ accepts the plain HTTP URLs of the server.

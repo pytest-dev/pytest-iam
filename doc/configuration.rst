@@ -59,7 +59,6 @@ A setting can be defined in several sources.
 The value from the first source in this list is used:
 
 #. the dictionary returned by :func:`~pytest_iam.iam_configuration`;
-#. a ``canaille.toml`` file in the current directory, or the file in the ``CANAILLE_CONFIG`` environment variable;
 #. the environment variables prefixed by ``PYTEST_IAM_``;
 #. the ``.pytest-iam.env`` file.
 

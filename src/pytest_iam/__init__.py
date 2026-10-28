@@ -275,7 +275,10 @@ def iam_server(
 ) -> Iterator[Server]:
     """Session fixture that starts the IAM server in a thread, and returns a :class:`Server`."""
     app = create_app(
-        config=iam_configuration, env_file=".pytest-iam.env", env_prefix="PYTEST_IAM_"
+        config=iam_configuration,
+        env_file=".pytest-iam.env",
+        env_prefix="PYTEST_IAM_",
+        config_file=False,
     )
     server = Server(app, iam_server_port, Backend.instance)
 

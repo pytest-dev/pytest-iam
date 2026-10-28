@@ -72,3 +72,37 @@ def test_redefine_iam_server_port(pytester):
     result = pytester.runpytest_subprocess()
 
     result.assert_outcomes(passed=1)
+
+
+def test_canaille_toml_is_ignored(pytester):
+    """A canaille.toml file does not configure the IAM server."""
+    pytester.path.joinpath("canaille.toml").write_text(
+        "[CANAILLE_OIDC]\nREQUIRE_NONCE = false\n"
+    )
+    pytester.makepyfile(
+        """
+        def test_require_nonce(iam_server):
+            assert iam_server.app.config["CANAILLE_OIDC"]["REQUIRE_NONCE"] is True
+        """
+    )
+
+    result = pytester.runpytest_subprocess()
+
+    result.assert_outcomes(passed=1)
+
+
+def test_canaille_config_is_ignored(pytester, monkeypatch):
+    """The file in CANAILLE_CONFIG does not configure the IAM server."""
+    config_file = pytester.path / "config.toml"
+    config_file.write_text("[CANAILLE_OIDC]\nREQUIRE_NONCE = false\n")
+    monkeypatch.setenv("CANAILLE_CONFIG", str(config_file))
+    pytester.makepyfile(
+        """
+        def test_require_nonce(iam_server):
+            assert iam_server.app.config["CANAILLE_OIDC"]["REQUIRE_NONCE"] is True
+        """
+    )
+
+    result = pytester.runpytest_subprocess()
+
+    result.assert_outcomes(passed=1)

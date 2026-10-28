@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - pytest-iam requires Canaille 0.4.1.
+- The IAM server no longer reads the ``canaille.toml`` file, nor the file in ``CANAILLE_CONFIG``.
 - A user logged in during a test, with ``Server.login`` or with the login form of ``Server.test_client``, is logged out at the end of the test.
 
 ### Fixed
