@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "pytest-iam"
-version = "0.3.0"
+version = "0.4.0"
 description = "A fully functional OAuth2 / OpenID Connect (OIDC) / SCIM server to be used in your test suite"
 authors = [{name="Yaal Coop", email="contact@yaal.coop"}]
 license = "MIT"
