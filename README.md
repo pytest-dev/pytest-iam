@@ -1,7 +1,7 @@
 pytest-iam
 ==========
 
-pytest-iam is a pytest plugin that starts an OAuth2 and OpenID Connect (OIDC) server for the tests of an application.
+pytest-iam is a pytest plugin that starts an OAuth2, OpenID Connect (OIDC) and SCIM server for the tests of an application.
 The server is a [Canaille](https://canaille.readthedocs.io) instance, built on [Authlib](https://authlib.org).
 
 - [Documentation](https://pytest-iam.readthedocs.io)
@@ -15,6 +15,7 @@ Why pytest-iam
 A mock of the identity provider only gives the answers that the test expects.
 pytest-iam runs a real IAM server instead,
 so the tests go through the real OAuth2 and OIDC flows: redirections, forms, code exchange and token introspection.
+SCIM applications send their requests to a real SCIM API.
 The server runs in a thread of the test process.
 It needs no container, and it only listens on `localhost`.
 
@@ -25,12 +26,19 @@ Installation
 uv add --dev pytest-iam
 ```
 
+The SCIM API needs the `scim` extra:
+
+```console
+uv add --dev "pytest-iam[scim]"
+```
+
 Usage
 -----
 
 The `iam_server` fixture gives access to the IAM server:
 
 - its URL, to configure the tested application;
+- its SCIM API at `/scim/v2`, with the `scim` extra;
 - its models, such as users, groups, clients and tokens, to prepare the tests and check their effects;
 - shortcuts to log users in and record their consent;
 - helpers to create random users, groups and tokens.
@@ -59,7 +67,7 @@ def test_login_shortcuts(iam_server, client, user, test_client):
     assert res.text == "Hello, user!"
 ```
 
-The [documentation](https://pytest-iam.readthedocs.io) has guides for client applications, resource servers and signed authorization requests.
+The [documentation](https://pytest-iam.readthedocs.io) has guides for client applications, resource servers, signed authorization requests and SCIM applications.
 
 License
 -------

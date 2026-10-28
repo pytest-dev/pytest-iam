@@ -39,6 +39,7 @@ intersphinx_mapping = {
     "werkzeug": ("https://werkzeug.palletsprojects.com/en/latest/", None),
     "authlib": ("https://docs.authlib.org/en/latest/", None),
     "pytest": ("https://docs.pytest.org/en/stable/", None),
+    "scim2_models": ("https://scim2-models.readthedocs.io/en/latest/", None),
 }
 
 nitpick_ignore = [("py:class", "canaille.backends.Backend")]

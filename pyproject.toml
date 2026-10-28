@@ -5,12 +5,12 @@ build-backend = "uv_build"
 [project]
 name = "pytest-iam"
 version = "0.3.0"
-description = "A fully functional OAuth2 / OpenID Connect (OIDC) server to be used in your test suite"
+description = "A fully functional OAuth2 / OpenID Connect (OIDC) / SCIM server to be used in your test suite"
 authors = [{name="Yaal Coop", email="contact@yaal.coop"}]
 license = "MIT"
 license-files = ["LICENSE.md"]
 readme = "README.md"
-keywords = ["oidc", "oauth", "oauth2", "openid", "identity", "pytest", "unit tests", "iam"]
+keywords = ["oidc", "oauth", "oauth2", "openid", "identity", "pytest", "unit tests", "iam", "scim"]
 classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 4 - Beta",
@@ -36,6 +36,11 @@ dependencies = [
     "faker>=38.2.0",
 ]
 
+[project.optional-dependencies]
+scim = [
+    "canaille[oidc,scim]>=0.4.1",
+]
+
 [project.urls]
 repository = "https://github.com/pytest-dev/pytest-iam"
 documentation = "https://pytest-iam.readthedocs.io/en/latest/"
@@ -44,10 +49,13 @@ changelog = "https://github.com/pytest-dev/pytest-iam/blob/main/CHANGELOG.md"
 [dependency-groups]
 dev = [
     "authlib>=1.2.1",
+    "canaille[oidc,scim]>=0.4.1",
     "mypy>=2.4.0",
     "prek>=0.1.3",
     "pytest-cov>=6.0.0",
     "requests>=2.31.0",
+    "scim2-client>=0.13.2",
+    "scim2-models>=0.12.3",
     "tox-uv>=1.16.0",
     "types-portpicker>=1.6.0.20260508",
 ]

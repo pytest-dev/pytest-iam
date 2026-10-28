@@ -294,6 +294,7 @@ def iam_configuration(iam_server_port: int) -> dict[str, Any]:
             "DYNAMIC_CLIENT_REGISTRATION_OPEN": True,
             "ACTIVE_JWKS": [jwk.as_dict(private=True)],
         },
+        "CANAILLE_SCIM": {"ENABLE_SERVER": True},
     }
 
 

@@ -9,6 +9,7 @@
    client-applications
    signed-authorization-requests
    resource-servers
+   scim
 
 .. toctree::
    :caption: Explanation
