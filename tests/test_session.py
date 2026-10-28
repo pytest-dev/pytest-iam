@@ -1,3 +1,5 @@
+from blinker import signal
+
 pytest_plugins = ["pytester"]
 
 
@@ -41,6 +43,31 @@ def test_login_in_module_fixture_is_kept(pytester):
     result = pytester.runpytest_subprocess()
 
     result.assert_outcomes(passed=2)
+
+
+def test_logout_on_iam_server(iam_server):
+    """A user logged in with login() is logged out by the IAM server logout page."""
+    user = iam_server.random_user()
+    iam_server.login(user)
+
+    iam_server.test_client.get("/logout")
+
+    assert iam_server.logged_user is None
+    iam_server.backend.delete(user)
+
+
+def test_logout_of_another_user_keeps_login(iam_server):
+    """Logging out another user does not log out the user logged in with login()."""
+    user = iam_server.random_user()
+    other = iam_server.random_user()
+    iam_server.login(user)
+
+    with iam_server.app.test_request_context():
+        signal("user_logged_out").send(iam_server.app, user=other)
+
+    assert iam_server.logged_user == user
+    iam_server.backend.delete(user)
+    iam_server.backend.delete(other)
 
 
 FORM_LOGIN = """

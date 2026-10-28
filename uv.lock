@@ -1444,6 +1444,7 @@ name = "pytest-iam"
 version = "0.3.0"
 source = { editable = "." }
 dependencies = [
+    { name = "blinker" },
     { name = "canaille", extra = ["oidc"] },
     { name = "faker" },
     { name = "portpicker" },
@@ -1470,6 +1471,7 @@ doc = [
 
 [package.metadata]
 requires-dist = [
+    { name = "blinker", specifier = ">=1.9.0" },
     { name = "canaille", extras = ["oidc"], specifier = ">=0.4.1" },
     { name = "faker", specifier = ">=38.2.0" },
     { name = "portpicker", specifier = ">=1.6.0" },

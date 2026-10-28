@@ -11,6 +11,7 @@ from wsgiref.simple_server import WSGIServer
 
 import portpicker
 import pytest
+from blinker import signal
 from canaille import create_app
 from canaille.app import models
 from canaille.app.session import UserSession
@@ -94,6 +95,11 @@ class Server:
             for name in set(g) - request.environ.get("pytest_iam.globals", set()):
                 g.pop(name)
 
+        @signal("user_logged_out").connect_via(self.app, weak=False)
+        def forget_logged_user(sender: Flask, user: User, **extra: Any) -> None:
+            if self.logged_user and self.logged_user.id == user.id:
+                self.logged_user = None
+
     def _make_request_handler(self) -> type[WSGIRequestHandler]:
         server = self
 
@@ -165,7 +171,8 @@ class Server:
     def login(self, user: User) -> None:
         """Log a user in on the IAM server, without the login form.
 
-        The user is logged out at the end of the test.
+        The user is logged out at the end of the test,
+        or when the user logs out on the IAM server.
         A login made by a module or session scoped fixture lasts until :meth:`logout`.
         """
         self.logged_user = user
