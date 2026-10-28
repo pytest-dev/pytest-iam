@@ -8,7 +8,9 @@ from types import ModuleType
 from typing import Any
 from wsgiref.simple_server import WSGIRequestHandler
 from wsgiref.simple_server import WSGIServer
+from wsgiref.types import WSGIApplication
 
+import httpx2
 import portpicker
 import pytest
 from blinker import signal
@@ -59,6 +61,9 @@ class Server:
     logged_user: User | None
     """The user logged in with :meth:`login`, or :data:`None`."""
 
+    mounts: dict[str, WSGIApplication]
+    """The applications mounted with :meth:`mount`, by URL."""
+
     def __init__(self, app: Flask, port: int, backend: Backend, logging: bool = False):
         self.app = app
         self.test_client = app.test_client()
@@ -70,6 +75,7 @@ class Server:
         )
         self.models = models
         self.logged_user = None
+        self.mounts = {}
 
         @self.app.before_request
         def login() -> None:
@@ -180,6 +186,21 @@ class Server:
     def logout(self) -> None:
         """Log out the user logged in with :meth:`login`."""
         self.logged_user = None
+
+    def mount(self, url: str, app: WSGIApplication) -> None:
+        """Serve the requests that the IAM server sends to a URL with a WSGI application.
+
+        The URL is a scheme, a host and an optional port, such as ``http://client.test``.
+        The application is unmounted at the end of the test.
+        A mount made by a module or session scoped fixture lasts until :meth:`unmount`.
+        """
+        self.app.extensions["canaille_http"].mount(url, httpx2.WSGITransport(app=app))
+        self.mounts[url] = app
+
+    def unmount(self, url: str) -> None:
+        """Unmount the application mounted on a URL with :meth:`mount`."""
+        self.app.extensions["canaille_http"].unmount(url)
+        self.mounts.pop(url, None)
 
     def consent(
         self, user: User, client: Client | None = None
@@ -320,3 +341,23 @@ def iam_restore_login(request: pytest.FixtureRequest) -> Iterator[None]:
     if cookies is not None:
         cookies.clear()
         cookies.update(saved_cookies)
+
+
+@pytest.fixture(autouse=True)
+def iam_restore_mounts(request: pytest.FixtureRequest) -> Iterator[None]:
+    """Autouse fixture that unmounts the applications mounted during each test.
+
+    It undoes the :meth:`~pytest_iam.Server.mount` and :meth:`~pytest_iam.Server.unmount` calls.
+    """
+    if "iam_server" not in request.fixturenames:
+        yield
+        return
+
+    server = request.getfixturevalue("iam_server")
+    saved_mounts = dict(server.mounts)
+    yield
+    for url in set(server.mounts) - set(saved_mounts):
+        server.unmount(url)
+    for url, app in saved_mounts.items():
+        if server.mounts.get(url) is not app:
+            server.mount(url, app)

@@ -14,6 +14,8 @@ Fixtures
 
 .. autofunction:: pytest_iam.iam_restore_login()
 
+.. autofunction:: pytest_iam.iam_restore_mounts()
+
 Server
 ======
 

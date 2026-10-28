@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - ``Server.random_token`` accepts ``subject=None``, to create a token that belongs to a client only.
+- ``Server.mount`` serves the requests that the IAM server sends to a URL with a WSGI application, without network.
+  It applies to the ``jwks_uri`` and ``request_uri`` of clients.
 
 ### Changed
 

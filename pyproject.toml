@@ -30,6 +30,7 @@ requires-python = ">=3.11"
 dependencies = [
     "blinker>=1.9.0",
     "canaille[oidc]>=0.4.1",
+    "httpx2>=2.13.1",
     "portpicker>=1.6.0",
     "pytest>=7.0.0",
     "faker>=38.2.0",

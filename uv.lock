@@ -1447,6 +1447,7 @@ dependencies = [
     { name = "blinker" },
     { name = "canaille", extra = ["oidc"] },
     { name = "faker" },
+    { name = "httpx2" },
     { name = "portpicker" },
     { name = "pytest" },
 ]
@@ -1474,6 +1475,7 @@ requires-dist = [
     { name = "blinker", specifier = ">=1.9.0" },
     { name = "canaille", extras = ["oidc"], specifier = ">=0.4.1" },
     { name = "faker", specifier = ">=38.2.0" },
+    { name = "httpx2", specifier = ">=2.13.1" },
     { name = "portpicker", specifier = ">=1.6.0" },
     { name = "pytest", specifier = ">=7.0.0" },
 ]
