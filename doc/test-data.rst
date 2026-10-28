@@ -47,7 +47,7 @@ The tested application must be registered as an OIDC client before it can log us
 .. note::
 
    The IAM server does not show the consent page to :attr:`trusted <canaille.oidc.basemodels.Client.trusted>` clients.
-   A client is trusted when its ``client_uri`` domain matches the ``CANAILLE_OIDC.TRUSTED_DOMAINS`` setting.
+   A client is trusted when its ``client_uri`` and all its ``redirect_uris`` match the ``CANAILLE_OIDC.TRUSTED_DOMAINS`` setting.
    By default, ``.localhost`` and ``127.0.0.1`` are trusted.
 
 Register a client dynamically
