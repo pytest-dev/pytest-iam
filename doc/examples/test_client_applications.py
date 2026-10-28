@@ -1,4 +1,5 @@
 import uuid
+from urllib.parse import urlencode
 
 import pytest
 from authlib.integrations.flask_client import OAuth
@@ -39,7 +40,25 @@ def app(iam_server, client):
     def authorize():
         token = oauth.iam.authorize_access_token()
         session["user"] = token["userinfo"]
+        session["id_token"] = token["id_token"]
         return redirect(url_for("protected"))
+
+    @app.route("/logout")
+    def logout():
+        query = urlencode(
+            {
+                "client_id": oauth.iam.client_id,
+                "id_token_hint": session.pop("id_token"),
+                "post_logout_redirect_uri": url_for("logged_out", _external=True),
+            }
+        )
+        session.pop("user")
+        metadata = oauth.iam.load_server_metadata()
+        return redirect(f"{metadata['end_session_endpoint']}?{query}")
+
+    @app.route("/logged-out")
+    def logged_out():
+        return "Goodbye!"
 
     return app
 
@@ -126,3 +145,23 @@ def test_account_creation(iam_server, client, test_client):
 
     user = iam_server.backend.get(iam_server.models.User, user_name="new_user")
     iam_server.backend.delete(user)
+
+
+def test_logout(iam_server, client, user, test_client):
+    # log the user in the application
+    iam_server.login(user)
+    iam_server.consent(user, client)
+    res = test_client.get("/protected")
+    res = iam_server.test_client.get(res.location)
+    test_client.get(res.location)
+
+    # 1. the logout page redirects to the IAM server
+    res = test_client.get("/logout")
+
+    # 2. the IAM server logs the user out, and redirects to the application
+    res = iam_server.test_client.get(res.location)
+    assert iam_server.logged_user is None
+
+    # 3. the application shows its logged out page
+    res = test_client.get(res.location)
+    assert res.text == "Goodbye!"

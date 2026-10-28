@@ -32,6 +32,7 @@ def client(iam_server):
         client_name="My Application",
         client_uri="http://client.test",
         redirect_uris=["http://client.test/authorize"],
+        post_logout_redirect_uris=["http://client.test/logged-out"],
         grant_types=["authorization_code"],
         response_types=["code"],
         token_endpoint_auth_method="client_secret_basic",

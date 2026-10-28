@@ -1,7 +1,7 @@
 Test a client application
 =========================
 
-This guide shows how to test the login of a client application against the IAM server.
+This guide shows how to test the login and the logout of a client application against the IAM server.
 It is meant for developers of an application that logs its users in with OAuth2 or OpenID Connect.
 The examples use the ``user`` and ``client`` fixtures from :doc:`test-data`.
 For applications that sign their authorization requests, see :doc:`signed-authorization-requests`.
@@ -15,7 +15,9 @@ The examples of this page use a Flask application with an `Authlib <https://auth
 
 - ``/protected`` redirects anonymous users to the IAM server, and greets logged in users;
 - ``/create`` redirects to the IAM server, to create an account;
-- ``/authorize`` exchanges the authorization code for a token, and stores the user in the session.
+- ``/authorize`` exchanges the authorization code for a token, and stores the user and the ID token in the session;
+- ``/logout`` clears the session, and redirects to the IAM server to log the user out;
+- ``/logged-out`` is the page where the IAM server sends users after they log out.
 
 .. literalinclude:: examples/test_client_applications.py
     :language: python
@@ -58,3 +60,19 @@ The ``/create`` page of the application sends this parameter.
     :pyobject: test_account_creation
 
 pytest-iam has no shortcut for the account creation.
+
+Test the logout
+---------------
+
+The ``/logout`` page of the application redirects to the ``end_session_endpoint`` of the IAM server,
+as defined by `OpenID Connect RP-Initiated Logout 1.0 <https://openid.net/specs/openid-connect-rpinitiated-1_0.html>`_.
+It sends the ID token in ``id_token_hint``, the ``client_id``, and a ``post_logout_redirect_uri`` registered for the client.
+The IAM server needs the ``client_id`` to redirect to the ``post_logout_redirect_uri``.
+With a valid ``id_token_hint``, the IAM server logs the user out without confirmation.
+
+A user logged in with :meth:`~pytest_iam.Server.login` is logged out too:
+:attr:`~pytest_iam.Server.logged_user` becomes :data:`None`.
+
+.. literalinclude:: examples/test_client_applications.py
+    :language: python
+    :pyobject: test_logout

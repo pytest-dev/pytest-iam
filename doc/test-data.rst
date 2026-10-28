@@ -38,6 +38,7 @@ Register a client
 
 The tested application must be registered as an OIDC client before it can log users in.
 ``redirect_uris`` contains the URL where the application receives the authorization code.
+``post_logout_redirect_uris`` contains the URL where the IAM server sends users after they log out.
 
 .. literalinclude:: examples/conftest.py
     :language: python
