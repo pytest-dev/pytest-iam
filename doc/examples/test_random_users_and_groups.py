@@ -10,9 +10,7 @@ def user(iam_server):
 
 @pytest.fixture
 def group(iam_server, user):
-    group = iam_server.random_group()
-    group.members = group.members + [user]
-    iam_server.backend.save(group)
+    group = iam_server.random_group(members=[user])
     yield group
     iam_server.backend.delete(group)
 

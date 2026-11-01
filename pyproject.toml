@@ -29,16 +29,16 @@ classifiers = [
 requires-python = ">=3.11"
 dependencies = [
     "blinker>=1.9.0",
-    "canaille[oidc]>=0.4.1",
+    "canaille[oidc]>=0.4.3",
     "httpx2>=2.13.1",
     "portpicker>=1.6.0",
-    "pytest>=7.0.0",
+    "pytest>=7.3.2",
     "faker>=38.2.0",
 ]
 
 [project.optional-dependencies]
 scim = [
-    "canaille[oidc,scim]>=0.4.1",
+    "canaille[oidc,scim]>=0.4.3",
 ]
 
 [project.urls]
@@ -49,7 +49,7 @@ changelog = "https://github.com/pytest-dev/pytest-iam/blob/main/CHANGELOG.md"
 [dependency-groups]
 dev = [
     "authlib>=1.2.1",
-    "canaille[oidc,scim]>=0.4.1",
+    "canaille[oidc,scim]>=0.4.3",
     "mypy>=2.4.0",
     "prek>=0.1.3",
     "pytest-cov>=6.0.0",

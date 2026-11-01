@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- pytest-iam requires Canaille 0.4.3 and pytest 7.3.2.
+- Groups must have at least one member.
+- ``Server.random_group`` adds a new random user as the member when ``members`` is not given.
+
 ## [0.4.0] - 2026-10-28
 
 ### Added

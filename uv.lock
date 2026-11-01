@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version >= '3.15'",
@@ -153,7 +153,7 @@ wheels = [
 
 [[package]]
 name = "canaille"
-version = "0.4.1"
+version = "0.4.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "blinker" },
@@ -173,7 +173,7 @@ dependencies = [
     { name = "wtforms-htmx-components" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/84/18/f5507e28ed2a020bde451d492fab7b631ac5411e7365afb9ad50ee67c0c7/canaille-0.4.1-py3-none-any.whl", hash = "sha256:d1827b98568c68b5fcf5fd9f645c0ee69dda738652a753c676ed990b41709908", size = 2119014, upload-time = "2026-10-28T15:56:22.716Z" },
+    { url = "https://files.pythonhosted.org/packages/9f/dd/63ef100433f8c9aeb6d6163ebac709ba43b7fdb9b7425b8972610e30d648/canaille-0.4.3-py3-none-any.whl", hash = "sha256:cf44a490bd655976a6bc4df07c46d9a7cc08cf555a5ebf846f6a4734386b7be4", size = 2120964, upload-time = "2026-10-29T21:42:53.333Z" },
 ]
 
 [package.optional-dependencies]
@@ -1523,19 +1523,19 @@ doc = [
 [package.metadata]
 requires-dist = [
     { name = "blinker", specifier = ">=1.9.0" },
-    { name = "canaille", extras = ["oidc"], specifier = ">=0.4.1" },
-    { name = "canaille", extras = ["oidc", "scim"], marker = "extra == 'scim'", specifier = ">=0.4.1" },
+    { name = "canaille", extras = ["oidc"], specifier = ">=0.4.3" },
+    { name = "canaille", extras = ["oidc", "scim"], marker = "extra == 'scim'", specifier = ">=0.4.3" },
     { name = "faker", specifier = ">=38.2.0" },
     { name = "httpx2", specifier = ">=2.13.1" },
     { name = "portpicker", specifier = ">=1.6.0" },
-    { name = "pytest", specifier = ">=7.0.0" },
+    { name = "pytest", specifier = ">=7.3.2" },
 ]
 provides-extras = ["scim"]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "authlib", specifier = ">=1.2.1" },
-    { name = "canaille", extras = ["oidc", "scim"], specifier = ">=0.4.1" },
+    { name = "canaille", extras = ["oidc", "scim"], specifier = ">=0.4.3" },
     { name = "mypy", specifier = ">=2.4.0" },
     { name = "prek", specifier = ">=0.1.3" },
     { name = "pytest-cov", specifier = ">=6.0.0" },
@@ -1654,14 +1654,14 @@ wheels = [
 
 [[package]]
 name = "scim2-client"
-version = "0.13.2"
+version = "0.14.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "scim2-models" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/67/9a/c84516f41990f32787ccc22ecce7224fd837322a20dedc1d3bc00bab24de/scim2_client-0.13.2.tar.gz", hash = "sha256:1397962f294f95c8982c543d422e2fa7fcf9295d5eb1af73067ab142090608e0", size = 37962, upload-time = "2026-10-09T11:28:09.624Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/25/b1/c818a58b62b903034705b2a4e2e6ccc6cb10fd0f38e6a1746cb8ea08718c/scim2_client-0.14.1.tar.gz", hash = "sha256:6f60caa7f3df6657a28885bd7b3dbbe5773ffb747bdc3cee0eaf35cb02452bc7", size = 42464, upload-time = "2026-10-29T20:43:39.046Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/71/56/d69c8bcf6cef54fac7afb930efae39e0f3b47399a12746ba6280df6d7ceb/scim2_client-0.13.2-py3-none-any.whl", hash = "sha256:9fafa5d903e1fae513a0d946ce7cd5fad2d697d47b55ae0b3204c0848c6d4b48", size = 41726, upload-time = "2026-10-09T11:28:07.874Z" },
+    { url = "https://files.pythonhosted.org/packages/bf/42/d1f3d3a23aceafbef06a1335836fa073c7778fea332412bdca11caff3082/scim2_client-0.14.1-py3-none-any.whl", hash = "sha256:bf7c3f3cf9da7cb8e813eaf560cfeab8037f6c1b5ab81b56cf137d8f94d3b7cd", size = 41465, upload-time = "2026-10-29T20:43:37.548Z" },
 ]
 
 [package.optional-dependencies]
@@ -1671,15 +1671,15 @@ httpx2 = [
 
 [[package]]
 name = "scim2-models"
-version = "0.12.3"
+version = "0.12.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "lark" },
     { name = "pydantic", extra = ["email"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1f/39/555f79620f52b5a53fe5789da00ef349c93e12e83ca60c5877d4fe0f4632/scim2_models-0.12.3.tar.gz", hash = "sha256:4faf3c1c050a18d55542fe94d7ef6d0d64d6e456a6b6616496ad9f85892da531", size = 109285, upload-time = "2026-10-25T22:39:13.173Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f2/af/bb485af5b4c024cdfe5be833daf57aee438e54fa5acc9a9ad1a3f210ccdc/scim2_models-0.12.4.tar.gz", hash = "sha256:d3cfaafbe49d6daa61b63afe0f0536774e7543218eaa222164ccb95ecb8871aa", size = 113701, upload-time = "2026-10-29T14:25:21.251Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1c/35/5410eb733b5dc555675a0efff89358426b142f0c8625619281f18edd549d/scim2_models-0.12.3-py3-none-any.whl", hash = "sha256:338e16cefe87c043c23e54209027f5c9c09d7532dbc428b1b9bb66a120f231d1", size = 132156, upload-time = "2026-10-25T22:39:11.515Z" },
+    { url = "https://files.pythonhosted.org/packages/e5/31/2f7a5618a84edc60508aaa92b4228f83424c9e993e90e224cae5a252baa3/scim2_models-0.12.4-py3-none-any.whl", hash = "sha256:d219558358557a674e0a5b85f6d11cb2cd8cdf3182c4942df0956891be052e8e", size = 132218, upload-time = "2026-10-29T14:25:19.869Z" },
 ]
 
 [[package]]
@@ -1725,23 +1725,23 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "alabaster" },
-    { name = "babel" },
-    { name = "colorama", marker = "sys_platform == 'win32'" },
-    { name = "docutils" },
-    { name = "imagesize" },
-    { name = "jinja2" },
-    { name = "packaging" },
-    { name = "pygments" },
-    { name = "requests" },
-    { name = "roman-numerals" },
-    { name = "snowballstemmer" },
-    { name = "sphinxcontrib-applehelp" },
-    { name = "sphinxcontrib-devhelp" },
-    { name = "sphinxcontrib-htmlhelp" },
-    { name = "sphinxcontrib-jsmath" },
-    { name = "sphinxcontrib-qthelp" },
-    { name = "sphinxcontrib-serializinghtml" },
+    { name = "alabaster", marker = "python_full_version < '3.12'" },
+    { name = "babel", marker = "python_full_version < '3.12'" },
+    { name = "colorama", marker = "python_full_version < '3.12' and sys_platform == 'win32'" },
+    { name = "docutils", marker = "python_full_version < '3.12'" },
+    { name = "imagesize", marker = "python_full_version < '3.12'" },
+    { name = "jinja2", marker = "python_full_version < '3.12'" },
+    { name = "packaging", marker = "python_full_version < '3.12'" },
+    { name = "pygments", marker = "python_full_version < '3.12'" },
+    { name = "requests", marker = "python_full_version < '3.12'" },
+    { name = "roman-numerals", marker = "python_full_version < '3.12'" },
+    { name = "snowballstemmer", marker = "python_full_version < '3.12'" },
+    { name = "sphinxcontrib-applehelp", marker = "python_full_version < '3.12'" },
+    { name = "sphinxcontrib-devhelp", marker = "python_full_version < '3.12'" },
+    { name = "sphinxcontrib-htmlhelp", marker = "python_full_version < '3.12'" },
+    { name = "sphinxcontrib-jsmath", marker = "python_full_version < '3.12'" },
+    { name = "sphinxcontrib-qthelp", marker = "python_full_version < '3.12'" },
+    { name = "sphinxcontrib-serializinghtml", marker = "python_full_version < '3.12'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/42/50/a8c6ccc36d5eacdfd7913ddccd15a9cee03ecafc5ee2bc40e1f168d85022/sphinx-9.0.4.tar.gz", hash = "sha256:594ef59d042972abbc581d8baa577404abe4e6c3b04ef61bd7fc2acbd51f3fa3", size = 8710502, upload-time = "2025-12-04T07:45:27.343Z" }
 wheels = [
@@ -1757,23 +1757,23 @@ resolution-markers = [
     "python_full_version >= '3.12' and python_full_version < '3.15'",
 ]
 dependencies = [
-    { name = "alabaster" },
-    { name = "babel" },
-    { name = "colorama", marker = "sys_platform == 'win32'" },
-    { name = "docutils" },
-    { name = "imagesize" },
-    { name = "jinja2" },
-    { name = "packaging" },
-    { name = "pygments" },
-    { name = "requests" },
-    { name = "roman-numerals" },
-    { name = "snowballstemmer" },
-    { name = "sphinxcontrib-applehelp" },
-    { name = "sphinxcontrib-devhelp" },
-    { name = "sphinxcontrib-htmlhelp" },
-    { name = "sphinxcontrib-jsmath" },
-    { name = "sphinxcontrib-qthelp" },
-    { name = "sphinxcontrib-serializinghtml" },
+    { name = "alabaster", marker = "python_full_version >= '3.12'" },
+    { name = "babel", marker = "python_full_version >= '3.12'" },
+    { name = "colorama", marker = "python_full_version >= '3.12' and sys_platform == 'win32'" },
+    { name = "docutils", marker = "python_full_version >= '3.12'" },
+    { name = "imagesize", marker = "python_full_version >= '3.12'" },
+    { name = "jinja2", marker = "python_full_version >= '3.12'" },
+    { name = "packaging", marker = "python_full_version >= '3.12'" },
+    { name = "pygments", marker = "python_full_version >= '3.12'" },
+    { name = "requests", marker = "python_full_version >= '3.12'" },
+    { name = "roman-numerals", marker = "python_full_version >= '3.12'" },
+    { name = "snowballstemmer", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-applehelp", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-devhelp", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-htmlhelp", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-jsmath", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-qthelp", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-serializinghtml", marker = "python_full_version >= '3.12'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/cd/bd/f08eb0f4eed5c83f1ba2a3bd18f7745a2b1525fad70660a1c00224ec468a/sphinx-9.1.0.tar.gz", hash = "sha256:7741722357dd75f8190766926071fed3bdc211c74dd2d7d4df5404da95930ddb", size = 8718324, upload-time = "2025-12-31T15:09:27.646Z" }
 wheels = [

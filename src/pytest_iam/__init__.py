@@ -137,10 +137,13 @@ class Server:
         """Create and save a :class:`~canaille.core.models.Group` with random values.
 
         Keyword arguments set some of the values.
+        Without ``members``, the only member is a new random user.
         """
         with self.app.app_context():
-            groups = fake_groups(nb_users_max=0)
-            group = groups[0]
+            if "members" not in kwargs:
+                kwargs["members"] = [self.random_user()]
+
+            group = fake_groups(nb_users_max=1)[0]
             self.backend.update(group, **kwargs)
             self.backend.save(group)
 

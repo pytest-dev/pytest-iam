@@ -29,4 +29,16 @@ def test_random_user(iam_server):
 
 
 def test_random_group(iam_server):
-    assert isinstance(iam_server.random_group(), iam_server.models.Group)
+    group = iam_server.random_group()
+    assert isinstance(group, iam_server.models.Group)
+    assert len(group.members) == 1
+
+
+def test_random_group_with_members(iam_server):
+    user = iam_server.random_user()
+    nb_users = len(iam_server.backend.query(iam_server.models.User))
+
+    group = iam_server.random_group(members=[user])
+
+    assert group.members == [user]
+    assert len(iam_server.backend.query(iam_server.models.User)) == nb_users
